@@ -11,6 +11,9 @@ MARGIN = 0.0005
 
 def haversine(lat1, long1, lat2, long2):
     """
+    Converted to be vectorised from:
+    https://stackoverflow.com/questions/4913349/haversine-formula-in-python-bearing-and-distance-between-two-gps-points 
+    
     Calculate the great circle distance in kilometers between two points 
     on the earth (specified in decimal degrees)
     """
@@ -47,7 +50,7 @@ def read_activity(activity):
     laps = pd.DataFrame(columns=['Timestamp', 'start_pos_lat', 'start_pos_long', 'end_pos_lat',
                                  'end_pos_long', 'total_timer_time', 'total_distance', 'avg_speed'])
     
-    with fitdecode.FitReader("/home/gareth/Documents/Programming/running/export_12264640/" + activity) as fit_file:
+    with fitdecode.FitReader("/home/gareth/Documents/Uni/2023/cosc470/data/" + activity) as fit_file:
         for frame in fit_file:         
             if isinstance(frame, fitdecode.records.FitDataMessage):
                 

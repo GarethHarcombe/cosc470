@@ -1,13 +1,4 @@
 '
-@misc{noauthor_jabref_nodate,
-	title = {{JabRef} - {Free} {Reference} {Manager} - {Stay} on top of your {Literature}},
-	url = {https://www.jabref.org/},
-	abstract = {JabRef is a free reference manager that helps you to discover, collect, organize and cite your scholarly literature and research in an efficient way.},
-	urldate = {2023-03-02},
-	journal = {JabRef},
-}
-
-'
 @InProceedings{DelgadoGonzalo2016,
   author    = {Delgado-Gonzalo, R. and Lemkaddem, A. and Renevey, Ph. and Calvo, E. Muntané and Lemay, M. and Cox, K. and Ashby, D. and Willardson, J. and Bertschi, M.},
   booktitle = {2016 38th {Annual} {International} {Conference} of the {IEEE} {Engineering} in {Medicine} and {Biology} {Society} ({EMBC})},
@@ -41,6 +32,9 @@
   pages        = {112300},
   volume       = {262},
   abstract     = {A machine learning method is developed which is capable of making predictions of nonlinear ship motions in a range of wave conditions when trained on response data from only a single seaway. The method is formulated around the equations of motion in the time domain, but the equations are augmented with data-driven terms that act to correct the force-balance in the equations. The data-driven nonlinear forcing terms are modeled using Long Short-Term Memory (LSTM) recurrent neural networks. The resulting hybrid governing equations are solved numerically. Predictions from the method are compared to nonlinear test data of 2-DOF motion of a Generic Prismatic Planing Hull (GPPH) at forward speed in head seas, with time histories given for both regular and irregular waves. The training data requirements to classify a specific seaway are investigated and quantified. Predictions over a range of significant wave heights and peak periods are performed using training data from only a single seaway to show the effectiveness of the method in generalizing across different environmental conditions.},
+  comment      = {LSTM to predict the motion of ships in waves. Similar due to the periodic nature of motion
+
+https://www.sciencedirect.com/science/article/pii/S0029801822015967},
   date         = {2022-10},
   doi          = {10.1016/j.oceaneng.2022.112300},
   file         = {:Marlantes2022 - A Neural Corrector Method for Prediction of the Vertical Motions of a High Speed Craft.html:URL},
@@ -52,32 +46,6 @@
 }
 
 '
-@Misc{,
-  title    = {A deep-learning approach for predicting oscillating motion of liquid slugs in a closed-loop pulsating heat pipe {\textbar} {Elsevier} {Enhanced} {Reader}},
-  doi      = {10.1016/j.ijheatmasstransfer.2021.121860},
-  file     = {:- A Deep Learning Approach for Predicting Oscillating Motion of Liquid Slugs in a Closed Loop Pulsating Heat Pipe _ Elsevier Enhanced Reader.html:URL},
-  language = {en},
-  url      = {https://reader.elsevier.com/reader/sd/pii/S0017931021009650?token=5BE42E917C6046935EDF7CEC74DC71F55FFD766C651DDD563BC6D0251C62A6EAC1E73ED8AE54A6F7573EA2904AA8001F&originRegion=us-east-1&originCreation=20230302080420},
-  urldate  = {2023-03-02},
-}
-
-'
-@Article{Wang2018,
-  author       = {Wang, Ze and Hu, Chuxiong and Zhu, Yu and He, Suqin and Zhang, Ming and Mu, Haihua},
-  title        = {Newton-{ILC} {Contouring} {Error} {Estimation} and {Coordinated} {Motion} {Control} for {Precision} {Multiaxis} {Systems} {With} {Comparative} {Experiments}},
-  issn         = {1557-9948},
-  number       = {2},
-  pages        = {1470--1480},
-  volume       = {65},
-  abstract     = {This paper proposes a Newton extremum seeking algorithm based iterative learning coordinated control (Newton-ILC) strategy for contouring motion accuracy of precision multiaxial systems. Specifically, as the contouring error estimation is critically important for coordinated contouring motion control, a cost function is constructed based on the reference contour, as well as the current position, and the minimal value of the function is searched to determine the contouring error point through an offline Newton algorithm. Consequently, high precision estimation of the contouring error can be achieved, even under extreme contouring tasks with high speed, large curvature, and sharp corners. The calculated contouring error is then projected to each axis, and the axial contouring errors are controlled by iterative learning method, while the learning results will be used to adjust the axial position reference commands for contouring accuracy improvement. Comparative experiments are conducted on a biaxial linear motor stage to validate the practical effectiveness of the proposed Newton-ILC strategy. The experimental results illustrate that the proposed Newton-ILC achieves not only nearly perfect contouring error estimation but obvious improvement of contouring accuracy as well after a few iterations. Particularly, in some extreme cases such as large initial tracking error, high speed, large curvature, and sharp corners, the proposed Newton-ILC strategy can achieve rather excellent contouring performance when compared with individual axis control, conditional cross-coupled control, and cross-coupled iterative learning coordinated control (CCILC) methods.},
-  date         = {2018-02},
-  doi          = {10.1109/TIE.2017.2733455},
-  file         = {:Wang2018 - Newton ILC Contouring Error Estimation and Coordinated Motion Control for Precision Multiaxis Systems with Comparative Experiments.html:URL},
-  journaltitle = {IEEE Transactions on Industrial Electronics},
-  keywords     = {Adaptive control, Motion control, Error analysis, Tracking, Stability analysis, Cost function, Estimation, Contouring error, contouring motion control, iterative learning coordinated control (ILC), multiaxis system, Newton algorithm},
-}
-
-'
 @Article{Yin2014,
   author       = {Yin, Jian-Chuan and Zou, Zao-Jian and Xu, Feng and Wang, Ni-Ni},
   title        = {Online ship roll motion prediction based on grey sequential extreme learning machine},
@@ -85,6 +53,9 @@
   pages        = {168--174},
   volume       = {129},
   abstract     = {For the online prediction of nonlinear systems with characteristics of time-varying dynamics and uncertainty, a sequential grey prediction approach is proposed based on the online sequential extreme learning machine (OS-ELM). The grey processing of time series alleviates the unfavorable effects of uncertainty in measurement data; the extremely fast learning speed and high generalization accuracy of OS-ELM enable online application of the sequential grey prediction approach. Ship's roll motion at sea is a complex nonlinear process with time-varying dynamics. Its dynamics also involves uncertainty caused by wind, random waves and rudder actions. In this paper, the proposed OS-ELM-based grey prediction approach is implemented for online ship roll prediction. The simulation of prediction is based on measurement data obtained from sea trials of the scientific research and training ship Yu Kun. Simulation results of ship roll prediction demonstrate the effectiveness and efficiency of the proposed grey neural prediction approach in dealing with time-varying nonlinear system with uncertainty.},
+  comment      = {Online sequential Extreme Learning model to predict the roll angle of a ship. A lot of physics baked into the model - could be a useful approach. But not trying to predict existing time series data.
+
+https://www.sciencedirect.com/science/article/pii/S0925231213009739},
   date         = {2014-04},
   doi          = {10.1016/j.neucom.2013.09.043},
   file         = {:Yin2014 - Online Ship Roll Motion Prediction Based on Grey Sequential Extreme Learning Machine.html:URL},
@@ -107,6 +78,9 @@
   publisher = {Association for Computing Machinery},
   series    = {{SITA}'20},
   abstract  = {Sports and international tournaments have gained world attention in the past decade. Enhancing sports activities and promoting sports to participate in international events, competitions, and tournaments play a substantial role in the development and advancement of nations around the globe. In this paper, we applied different deep learning models for predicting athletes' performance in tournaments to help them improve their results. We propose a deep learning selection algorithm to evaluate the effectiveness of the athletes' current training by predicting their race results upon completing each additional training, which potentially improves their performance. We gathered public training data for athletes who participated in the 2017 Boston Marathon within a five-month window prior to the race. Deep learning models were applied and evaluated to predict marathon finishing times. These include Recurrent Neural Networks (RNN), Long Short-Term Memory (LSTM), and Gated Recurrent Units (GRU). Results show that Deep Learning models give improved race time prediction accuracy over the baseline machine learning model, such as standard Linear Regression (LR).},
+  comment   = {LSTM and Gated Recurrent Memory to predict athletes performance. Key takeaways are picking out relevant features. 
+
+https://dl.acm.org/doi/abs/10.1145/3419604.3419786},
   doi       = {10.1145/3419604.3419786},
   file      = {:ElKassabi2020 - Deep Learning Approach for Forecasting Athletes' Performance in Sports Tournaments.html:URL},
   isbn      = {9781450377331},
@@ -116,27 +90,114 @@
 }
 
 '
-@Misc{,
-  title      = {Machine learning methods for the automatic evaluation of exercises on sensor-equipped weight training machines - 1-s2.0-S1877705812017092-main},
-  accessdate = {2023-03-06},
-  file       = {:- Machine Learning Methods for the Automatic Evaluation of Exercises on Sensor Equipped Weight Training Machines 1 S2.0 S1877705812017092 Main.html:URL},
-  url        = {https://pdf.sciencedirectassets.com/278653/1-s2.0-S1877705812X00146/1-s2.0-S1877705812017092/main.pdf?X-Amz-Security-Token=IQoJb3JpZ2luX2VjEFIaCXVzLWVhc3QtMSJGMEQCID%2FctAmXD47CDhvwDVVZnYedOcdHov%2FPYlMriZyKbq%2FbAiA8THSZbREn0niflpgibK%2FyFPD3ob93tXwvxpUwurJgTCq8BQj7%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F8BEAUaDDA1OTAwMzU0Njg2NSIMn9snhRCgC%2FxTSBxqKpAFn%2FQn3zphzG35JRi2gjHZEM0dxKgUB5gil54tTh2NcN0BMRigDco3HPX%2Br0q77YuUX%2FdI6ABPc5cLoJEhSG7%2FofUztJcBEKvgD72WTKyqi1airSt24kUYfO%2Budwxl8jijozMlypMIAagVpXFM8uxaVSQ2kgKNr3tcl6zh5E%2BgdzCe64oBZrvCVVrNY4JrVyP5q6hPOry%2FnHoxqmLz7b0Oig4wp2f5CmC41HbYVIpHvhk%2BL1Xt6THEVzaFtaSz%2FZAUuE3aqu96Y8e7Bf7pXQUpo31pSCoer3pC%2Bk1DoSk38jZuC4FYP7klQb0%2F%2Fah7mCyXJJVWfSZJWYx7IrkUcFHCRHGyC%2BuhL2feCGOmawFGvYZvF5IvU49YYgqL2AAH8JMcg3SGdhg04qhtUPGLRluv%2Bwmx5Cx1kPFSVct1RmQuW9RV582l%2BvY5gRLCW43xO6XyCJ4LySDU48euXpNRCHp1QBO06kia7EH8Z3a%2FGhBrdydHCVcCoFZgOwhUCcwUijV5X%2F24tj6PJ5WQxSQDsENTnj8S4JQYKOY95fssCx%2FPKpmLM40fBHkB1u49ZwHCk%2F7vDa3HKOIrheUUG9sjrJ%2B5vcDQ5m54ogsPwkX6GCSZcY%2FouMNHYz9dHFGH0qX8tsUujXUcZhh%2FdGZ1cc8rNeH%2F2ur6eXe3KjiFKQjaDT1kRst12sYI1CUKD2vacjhMySK7%2B2IC1FKhPg34RkADNcH9nkBkNk20DvoGzegN9pUmsraBDinf2YeWlRCWecMm0bG9CyocTN6uAz3SsTupmTVtZqd18zYb5yNX0h7HlZ7aWMQr2T%2Fb7AXroyyiwoa8Rmr8wVLyiBedTe8F4jkc3wAGisXZkDgGhRe8oe%2B5T7qCHaEw9YeVoAY6sgE22xjWF0nbJ7ppaON9tAMnWohG2saFLjy2d5PN1mEPhfJXBRdbonCkxDvJOhHNvY4v1ROeSR6bqO%2FwliCAf2BR0C5ulai85m5GVnbuHD2%2BMQx3%2FwOsTvi0865JHTI0wysfYjpzVuYvLR8N5iUh04lOPynfGG%2BblH9CS0peF04%2BzaC1JjKpll38lfxyBzhMduomm10YGC0dQ5wPy1M1Q6%2FBJ2cwY6Z54IrFzBe2zm%2F%2BfIhP&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20230306T022836Z&X-Amz-SignedHeaders=host&X-Amz-Expires=300&X-Amz-Credential=ASIAQ3PHCVTY7RHE4HE7%2F20230306%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=30239f7786de588c073ca9b917aca64861669834ec6ed87890d19247bc313e13&hash=a3be2623b4f772070054c87d43c08603c6b89c4d6126e056daca6094ae4d2262&host=68042c943591013ac2b2430a89b270f6af2c76d8dfd086a07176afe7c76c2c61&pii=S1877705812017092&tid=spdf-12a67396-0dcb-4394-b32e-d605f3541458&sid=ece15bc72a1d29448d5bdd21b1e1f6264046gxrqa&type=client&tsoh=d3d3LnNjaWVuY2VkaXJlY3QuY29t&ua=0b145301515954065a&rr=7a372a8ebe311c50&cc=nz},
+@Article{Preatoni2020,
+  author   = {Preatoni, Ezio and Nodari, Stefano and Lopomo, Nicola Francesco},
+  journal  = {Frontiers in Bioengineering and Biotechnology},
+  title    = {Supervised {Machine} {Learning} {Applied} to {Wearable} {Sensor} {Data} {Can} {Accurately} {Classify} {Functional} {Fitness} {Exercises} {Within} a {Continuous} {Workout}},
+  year     = {2020},
+  issn     = {2296-4185},
+  month    = jul,
+  pages    = {664},
+  volume   = {8},
+  abstract = {Observing, classifying and assessing human movements is important in many applied fields, including human-computer interface, clinical assessment, activity monitoring and sports performance. The redundancy of options in planning and implementing motor programmes, the inter- and intra-individual variability in movement execution, and the time-continuous, high-dimensional nature of motion data make segmenting sequential movements into a smaller set of discrete classes of actions non-trivial. We aimed to develop and validate a method for the automatic classification of four popular functional fitness drills, which are commonly performed in current circuit training routines. Five inertial measurement units were located on the upper and lower limb, and on the trunk of fourteen participants. Positions were chosen by keeping into account the dynamics of the movement and the positions where commercially-available smart technologies are typically secured. Accelerations and angular velocities were acquired continuously from the units and used to train and test different supervised learning models, including k-Nearest Neighbors (kNN) and support-vector machine (SVM) algorithms. The use of different kernel functions, as well as different strategies to segment continuous inertial data were explored. Classification performance was assessed from both the training dataset (k-fold cross-validation), and a test dataset (leave-one-subject-out validation). Classification from different subsets of the measurement units was also evaluated (1-sensor and 2-sensor data). SVM with a cubic kernel and fed with data from 600 ms windows with a 10\% overlap gave the best classification performances, yielding to an overall accuracy of 97.8\%. This approach did not misclassify any functional fitness movement for another, but confused relatively frequently (2.8–18.9\%) a fitness movement phase with the transition between subsequent repetitions of the same task or different drills. Among 1-sensor configurations, the upper arm achieved the best classification performance (96.4\% accuracy), whereas combining the upper arm and the thigh sensors obtained the highest level of accuracy (97.6\%) from 2-sensors movement tracking. We found that supervised learning can successfully classify complex sequential movements such as those of functional fitness workouts. Our approach, which could exploit technologies currently available in the consumer market, demonstrated exciting potential for future on-field applications including unstructured training.},
+  comment  = {Uses SVM and kNN to do rolling window classifications on the activity, for cross fit style exercises https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7358600/
+Much finer grain data though},
+  doi      = {10.3389/fbioe.2020.00664},
+  file     = {:preatoni_supervised_2020 - Supervised Machine Learning Applied to Wearable Sensor Data Can Accurately Classify Functional Fitness Exercises within a Continuous Workout.html:URL;:Preatoni2020 - Supervised Machine Learning Applied to Wearable Sensor Data Can Accurately Classify Functional Fitness Exercises within a Continuous Workout.pdf:PDF},
+  pmcid    = {PMC7358600},
+  pmid     = {32733863},
+  url      = {https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7358600/},
+  urldate  = {2023-03-12},
 }
 
 '
-@Misc{,
-  title      = {Frontiers | Supervised Machine Learning Applied to Wearable Sensor Data Can Accurately Classify Functional Fitness Exercises Within a Continuous Workout},
-  accessdate = {2023-03-06},
-  file       = {:- Frontiers _ Supervised Machine Learning Applied to Wearable Sensor Data Can Accurately Classify Functional Fitness Exercises within a Continuous Workout.html:URL},
-  url        = {https://www.frontiersin.org/articles/10.3389/fbioe.2020.00664/full},
+@Article{Yoon2021,
+  author    = {Yoon, Aejung and Kim, Sung Jin},
+  journal   = {INTERNATIONAL JOURNAL OF HEAT AND MASS TRANSFER},
+  title     = {A deep-learning approach for predicting oscillating motion of liquid slugs in a closed-loop pulsating heat pipe},
+  year      = {2021},
+  issn      = {0017-9310},
+  volume    = {181},
+  abstract  = {This paper presents the very first application of a deep neural network (DNN) model to predict the oscillating motion of liquid slugs in a closed-loop pulsating heat pipe (CLPHP). The time-series data of the positions of liquid-vapor menisci are obtained from flow visualization using a high-speed camera: five liquid slugs in the 5-turn CLPHP are observed to have rapid oscillation with varying amplitude. Time series analysis is conducted on the flow visualization results by employing the DNN model, which uses a Long Short-Term Memory (LSTM)-based encoder-decoder architecture as a sequence-to-sequence deep learning framework. From the model, the position of each meniscus is predicted with a single input data of its own (univariate prediction) or with multiple input data of all the menisci (multivariate prediction): It is shown that the predicted values match closely with the measured values for both univariate and multivariate predictions. To quantitatively examine the prediction performance, the average volumetric fraction in the condenser section, a major parameter for the thermal performance of the CLPHP, is calculated using the predicted values of positions of menisci. This model is found to be accurate to within +/- 30\% in predicting the average volumetric fraction for both univariate and multivariate cases. This study sheds new light on analyzing the dynamics of the complex oscillating motion in pulsating heat pipes. (c) 2021 Elsevier Ltd. All rights reserved.},
+  comment   = {Deep learning LSTM to predict periodic behaviour of liquids. Not super relevant, we're not trying to predict time series data, more annotate existing data.
+
+https://koasas.kaist.ac.kr/handle/10203/288452},
+  doi       = {10.1016/j.ijheatmasstransfer.2021.121860},
+  language  = {English},
+  publisher = {PERGAMON-ELSEVIER SCIENCE LTD},
+  url       = {https://koasas.kaist.ac.kr/handle/10203/288452},
+  urldate   = {2023-03-12},
 }
 
 '
-@Misc{,
-  title      = {Intelligent Trainer for Athletes using Machine Learning | IEEE Conference Publication | IEEE Xplore},
-  accessdate = {2023-03-06},
-  file       = {:- Intelligent Trainer for Athletes Using Machine Learning _ IEEE Conference Publication _ IEEE Xplore.html:URL},
-  url        = {https://ieeexplore.ieee.org/abstract/document/8940477},
+@Article{Wang2018a,
+  author   = {Wang, Ze and Hu, Chuxiong and Zhu, Yu and He, Suqin and Zhang, Ming and Mu, Haihua},
+  journal  = {IEEE Transactions on Industrial Electronics},
+  title    = {Newton-{ILC} {Contouring} {Error} {Estimation} and {Coordinated} {Motion} {Control} for {Precision} {Multiaxis} {Systems} {With} {Comparative} {Experiments}},
+  year     = {2018},
+  issn     = {1557-9948},
+  month    = feb,
+  number   = {2},
+  pages    = {1470--1480},
+  volume   = {65},
+  abstract = {This paper proposes a Newton extremum seeking algorithm based iterative learning coordinated control (Newton-ILC) strategy for contouring motion accuracy of precision multiaxial systems. Specifically, as the contouring error estimation is critically important for coordinated contouring motion control, a cost function is constructed based on the reference contour, as well as the current position, and the minimal value of the function is searched to determine the contouring error point through an offline Newton algorithm. Consequently, high precision estimation of the contouring error can be achieved, even under extreme contouring tasks with high speed, large curvature, and sharp corners. The calculated contouring error is then projected to each axis, and the axial contouring errors are controlled by iterative learning method, while the learning results will be used to adjust the axial position reference commands for contouring accuracy improvement. Comparative experiments are conducted on a biaxial linear motor stage to validate the practical effectiveness of the proposed Newton-ILC strategy. The experimental results illustrate that the proposed Newton-ILC achieves not only nearly perfect contouring error estimation but obvious improvement of contouring accuracy as well after a few iterations. Particularly, in some extreme cases such as large initial tracking error, high speed, large curvature, and sharp corners, the proposed Newton-ILC strategy can achieve rather excellent contouring performance when compared with individual axis control, conditional cross-coupled control, and cross-coupled iterative learning coordinated control (CCILC) methods.},
+  comment  = {https://ieeexplore.ieee.org/document/7995126},
+  doi      = {10.1109/TIE.2017.2733455},
+  keywords = {Adaptive control, Motion control, Error analysis, Tracking, Stability analysis, Cost function, Estimation, Contouring error, contouring motion control, iterative learning coordinated control (ILC), multiaxis system, Newton algorithm},
+}
+
+'
+@Article{Novatchkov2012,
+  author   = {Novatchkov, Hristo and Baca, Arnold},
+  journal  = {Procedia Engineering},
+  title    = {Machine learning methods for the automatic evaluation of exercises on sensor-equipped weight training machines},
+  year     = {2012},
+  issn     = {1877-7058},
+  month    = jan,
+  pages    = {562--567},
+  volume   = {34},
+  abstract = {The present paper proposes pattern recognition techniques for the evaluation of exercises performed on weight training machines equipped with a load cell and rotary encoder for the measurement of essential force and weight displacement characteristics during training. The latter parameters can be used for the implementation of intelligent modeling methods like artificial neural networks in order to assess the exercise technique automatically and provide the athlete with appropriate feedback. First results of the developed classifiers indicate good performance values and high classification rates, demonstrating a significant potential of machine learning routines for the autonomous evaluation of performances on weight machines.},
+  comment  = {Analysing gym workout data, includes segmentation in pipeline before classification. Discusses preprocessing techniques such as a strong low-pass filter. Peak detection techniques for segmentation, looking at force applied (speed is analogous in this project). This paper uses 100Hz frequency data, a lot higher than the 0.5-0.2Hz data collected from GPS watches. 
+Then features extracted for each segment
+
+https://www.sciencedirect.com/science/article/pii/S1877705812017092},
+  doi      = {10.1016/j.proeng.2012.04.096},
+  file     = {:Novatchkov2012 - Machine Learning Methods for the Automatic Evaluation of Exercises on Sensor Equipped Weight Training Machines.html:URL},
+  keywords = {Weight training, machine learning, feedback, ubiquitious computing, sensor technologies},
+  language = {en},
+  series   = {{ENGINEERING} {OF} {SPORT} {CONFERENCE} 2012},
+  url      = {https://www.sciencedirect.com/science/article/pii/S1877705812017092},
+  urldate  = {2023-03-12},
+}
+
+'
+@InProceedings{Attigala2019,
+  author    = {Attigala, D. A. and Weeraman, R. and Fernando, W. S. S. W and Mahagedara, M. M. S. U and Gamage, M. P. A. W. and Jayakodi, T.},
+  booktitle = {2019 {International} {Conference} on {Computing}, {Power} and {Communication} {Technologies} ({GUCON})},
+  title     = {Intelligent {Trainer} for {Athletes} using {Machine} {Learning}},
+  year      = {2019},
+  month     = sep,
+  pages     = {898--903},
+  abstract  = {International professional athletes are looked after and trained by a team of professionals consisting of trainers and medical professionals among other. They make sure that the athlete is physically and mentally prepared to compete in a competition, and often train for years for the perfect results. Sri Lankan athletes however do not have the same luxury of being taken cared by a team of such professionals since they are young due to the lack of adequate resources in the country. `Optio' mobile application aims to provide a solution for this problem by creating a mobile application that the athlete constantly has access to, which will provide him/her with dietary, exercise and health related advice catered and customized to each individual athlete's needs. Consequently, this will provide a method which will let the athlete's trainer monitor their athletes easily as well as let them pick the most suitable athlete for a competition.},
+  comment   = {https://ieeexplore.ieee.org/document/8940477},
+  keywords  = {Training, Stress, Sports, Schedules, Information technology, Injuries, Ontologies, Amazon Machine Learning, Training Stress Balance, Chronic Training Load, Acute Training LoadMetabolism},
+}
+
+'
+@InProceedings{Altmayer2000,
+  author    = {Altmayer, C.},
+  booktitle = {Proceedings of the {IEEE} {Intelligent} {Vehicles} {Symposium} 2000 ({Cat}. {No}.{00TH8511})},
+  title     = {Enhancing the integrity of integrated {GPS}/{INS} systems by cycle slip detection and correction},
+  year      = {2000},
+  month     = oct,
+  pages     = {174--179},
+  abstract  = {Satellite navigation systems are widely used for high accuracy applications. Before the carrier phase observable can be utilized as the most accurate ranging information its inherent integer cycle ambiguity must be resolved. The algorithms for ambiguity resolution and carrier phase positioning rely on the ambiguities being constant. However, high dynamics, shadowing or multipath may cause so-called cycle slips which would deteriorate the accuracy if remained undetected. A new method was developed using an integrated system consisting of an inertial measurement unit and a differential GPS (Global Positioning System) sensor. With this method the integrity of cycle slip free carrier phase information is greatly enhanced which was demonstrated in driving tests.},
+  comment   = {Techniques exist to directly correct errors in GPS data. However, these require the raw values measured from satellites, not the processed coordinates. Hence, we will have to do more macro analysis for detecting and correcting outliers. 
+
+https://ieeexplore.ieee.org/abstract/document/898337},
+  doi       = {10.1109/IVS.2000.898337},
+  file      = {:Altmayer2000 - Enhancing the Integrity of Integrated GPS_INS Systems by Cycle Slip Detection and Correction.html:URL},
+  keywords  = {Global Positioning System, Phase measurement, Vehicle dynamics, Satellite navigation systems, Aircraft navigation, Phase detection, Shadow mapping, Sensor systems, Artificial intelligence, Control systems},
 }
 
 @Comment{jabref-meta: databaseType:bibtex;}

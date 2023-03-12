@@ -5,6 +5,7 @@ import pandas as pd
 from matplotlib import cm
 import matplotlib.pyplot as plt
 import fitdecode
+from scipy.optimize import fsolve
 
 MARGIN = 0.0005
 
@@ -145,3 +146,69 @@ def plot_map(points, laps, pc="blue", lc="red", cmap='brg'):
                       ax=ax)
     
     ax.legend(["Data points", "Laps"])
+
+
+class Circle:
+    def __init__(self, a, b, r, top_half) -> None:
+        """
+        circle in form:
+          x = a + r cos(t)
+          y = b + r sin(t)
+
+        top_half: bool whether the circle is the top half or bottom half of the circle/track
+        """
+        self.a = a
+        self.b = b
+        self.r = r
+
+        self.fx = lambda t: self.a + self.r * np.cos(t)
+        self.fy = lambda t: self.b + self.r * np.sin(t)
+        
+        self.dydx = lambda t: -np.cos(t) / (np.sin(t))
+        self.top_half = top_half
+
+    def closest_point_on_circle(self, x1, y1):
+        """
+        Given a point, find the closest projection onto the circle
+        Return None if below/above the semi circle defined by self.top_half
+        """
+        t = np.arctan2(y1 - self.b, x1 - self.a)
+
+        if self.top_half and (t > np.pi or t < 0):
+            return None
+        elif not self.top_half and t < np.pi and t > 0:
+            return None
+        else:
+            return (self.fx(t), self.fy(t))
+
+
+def closest_point_on_track(x1, y1):
+    """
+    Projects any point onto the closest point on a 400m track. 
+    Assumes 400m track is centered at (0, 0)
+    
+    400m track - standard:
+    https://www.desmos.com/calculator/enbx7xeuzp 
+    there are also tracks with shorter straights (around 80m) and 120m bends - these are ignored for now
+    """
+
+    r = 36.5   # radius of the circles
+    s = 84.39  # straight lengths
+
+    # first bend
+    circle = Circle(0, s/2, r, True)
+    first_bend_point = circle.closest_point_on_circle(x1, y1)
+
+    # back straight
+    back_straight = (-r, y1) if y1 < s/2 and y1 > -s/2 else None
+
+    # back bend
+    circle = Circle(0, -s/2, r, False)
+    back_bend_point = circle.closest_point_on_circle(x1, y1)
+    
+    # home straight
+    home_straight = (r, y1) if y1 < s/2 and y1 > -s/2 else None
+
+    points = [first_bend_point, back_straight, back_bend_point, home_straight]
+    return [point for point in points if point is not None][0]
+

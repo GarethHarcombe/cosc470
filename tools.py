@@ -3,11 +3,12 @@
 import numpy as np
 import pandas as pd
 from matplotlib import cm
-import matplotlib.pyplot as plt
 import fitdecode
-from scipy.optimize import fsolve
 
-MARGIN = 0.0005
+
+MARGIN = 1
+R = 6371 # Radius of earth in kilometers. Use 3956 for miles. Determines return value units.
+HOME_DIR = "/home/gareth/Documents/Uni/2023/cosc470/"
 
 
 def haversine(lat1, long1, lat2, long2):
@@ -30,8 +31,8 @@ def haversine(lat1, long1, lat2, long2):
     dlat = lat2 - lat1 
     a = np.sin(dlat/2)**2 + np.cos(lat1) * np.cos(lat2) * np.sin(dlon/2)**2
     c = 2 * np.arcsin(np.sqrt(a)) 
-    r = 6371 # Radius of earth in kilometers. Use 3956 for miles. Determines return value units.
-    return c * r
+    
+    return c * R
 
 
 def get_frame_field(frame, field):
@@ -51,7 +52,7 @@ def read_activity(activity):
     laps = pd.DataFrame(columns=['Timestamp', 'start_pos_lat', 'start_pos_long', 'end_pos_lat',
                                  'end_pos_long', 'total_timer_time', 'total_distance', 'avg_speed'])
     
-    with fitdecode.FitReader("/home/gareth/Documents/Uni/2023/cosc470/data/" + activity) as fit_file:
+    with fitdecode.FitReader(HOME_DIR + activity) as fit_file:
         for frame in fit_file:         
             if isinstance(frame, fitdecode.records.FitDataMessage):
                 
@@ -96,12 +97,23 @@ def read_activity(activity):
                                                'cadence':   (cadence + frac_cadence) * 2}])
                         points = pd.concat([points, entry], axis=0, ignore_index=True)
     
+    lat_mean = np.cos(points.lat.mean())
+
     # why we need to divide by 2**32 / 360:
     # https://gis.stackexchange.com/questions/371656/garmin-fit-coordinate-system
     points = (
         points
         .assign(lat =lambda x: x.lat / (2**32 / 360))
         .assign(long=lambda x: x.long / (2**32 / 360))
+
+        # project roughly onto x y plane
+        # https://stackoverflow.com/questions/16266809/convert-from-latitude-longitude-to-x-y 
+        .assign(x=lambda x: R * x.long * np.cos(lat_mean))
+        .assign(y=lambda x: R * x.lat)
+
+        # center the points - need to decide a reasonable place to center (such as center of track)
+        # .assign(x=lambda x: x.x - x.x.min())
+        # .assign(y=lambda x: x.y - x.y.min())
     )
     
     laps = (
@@ -110,6 +122,11 @@ def read_activity(activity):
         .assign(start_pos_long=lambda x: x.start_pos_long / (2**32 / 360))
         .assign(end_pos_lat   =lambda x: x.end_pos_lat    / (2**32 / 360))
         .assign(end_pos_long  =lambda x: x.end_pos_long   / (2**32 / 360))
+
+        .assign(start_x=lambda x: R * x.start_pos_long * np.cos(lat_mean))
+        .assign(start_y=lambda x: R * x.start_pos_lat)
+        .assign(end_x  =lambda x: R * x.end_pos_long   * np.cos(lat_mean))
+        .assign(end_y  =lambda x: R * x.end_pos_lat)
     )    
     
     return (points, laps)
@@ -127,25 +144,47 @@ def plot_map(points, laps, pc="blue", lc="red", cmap='brg'):
 
     Output: Returns none, but displays plot
     """
-    max_diff = max(points.lat.max()  - points.lat.min(), 
-                   points.long.max() - points.long.min())
+
+    max_diff = max(points.x.max() - points.x.min(), 
+                   points.y.max() - points.y.min())
     
-    ax = points.plot.scatter(x="lat", 
-                        y="long",
-                        c=pc,
-                        s=5,
-                        xlim=(points.lat.min() - MARGIN, max(points.lat.max(), points.lat.min() + max_diff) + MARGIN),
-                        ylim=(points.long.min() - MARGIN, max(points.long.max(), points.long.min() + max_diff) + MARGIN),
-                        cmap=cm.get_cmap(cmap)
+    ax = points.plot.scatter(x="x", 
+                             y="y",
+                             c=pc,
+                             s=5,
+                             xlim=(points.x.min() - MARGIN, max(points.x.max(), points.x.min() + max_diff) + MARGIN),
+                             ylim=(points.y.min() - MARGIN, max(points.y.max(), points.y.min() + max_diff) + MARGIN),
+                             cmap=cm.get_cmap(cmap),
+                             figsize=(7, 7)
     )
 
-    laps.plot.scatter(x="end_pos_lat",
-                      y="end_pos_long",
+    laps.plot.scatter(x="end_x",
+                      y="end_y",
                       alpha=0.7,
                       c=lc,
                       ax=ax)
     
     ax.legend(["Data points", "Laps"])
+
+
+def consistent_scale_plot(points):
+    points = (
+        points
+        .assign(x=lambda x: x.x - x.x.mean())
+        .assign(y=lambda x: x.y - x.y.mean())
+    )
+
+    MAP_SIZE = 200
+
+    points.plot.scatter(x="x", 
+                        y="y",
+                        c="blue",
+                        s=3,
+                        alpha=0.2,
+                        xlim=(-MAP_SIZE, MAP_SIZE),
+                        ylim=(-MAP_SIZE, MAP_SIZE),
+                        figsize=(10, 10)
+    )
 
 
 class Circle:
@@ -188,7 +227,7 @@ def closest_point_on_track(x1, y1):
     Assumes 400m track is centered at (0, 0)
     
     400m track - standard:
-    https://www.desmos.com/calculator/enbx7xeuzp 
+    https://www.desmos.com/calculator/sikussppqz
     there are also tracks with shorter straights (around 80m) and 120m bends - these are ignored for now
     """
 

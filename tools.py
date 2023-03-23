@@ -98,6 +98,7 @@ def read_activity(activity):
                         points = pd.concat([points, entry], axis=0, ignore_index=True)
     
     lat_mean = np.cos(points.lat.mean())
+    SCALING_FACTOR = 10
 
     # why we need to divide by 2**32 / 360:
     # https://gis.stackexchange.com/questions/371656/garmin-fit-coordinate-system
@@ -108,8 +109,8 @@ def read_activity(activity):
 
         # project roughly onto x y plane
         # https://stackoverflow.com/questions/16266809/convert-from-latitude-longitude-to-x-y 
-        .assign(x=lambda x: R * x.long * np.cos(lat_mean))
-        .assign(y=lambda x: R * x.lat)
+        .assign(x=lambda x: SCALING_FACTOR * R * x.long * np.cos(lat_mean))
+        .assign(y=lambda x: SCALING_FACTOR * R * x.lat)
 
         # center the points - need to decide a reasonable place to center (such as center of track)
         # .assign(x=lambda x: x.x - x.x.min())
@@ -123,10 +124,10 @@ def read_activity(activity):
         .assign(end_pos_lat   =lambda x: x.end_pos_lat    / (2**32 / 360))
         .assign(end_pos_long  =lambda x: x.end_pos_long   / (2**32 / 360))
 
-        .assign(start_x=lambda x: R * x.start_pos_long * np.cos(lat_mean))
-        .assign(start_y=lambda x: R * x.start_pos_lat)
-        .assign(end_x  =lambda x: R * x.end_pos_long   * np.cos(lat_mean))
-        .assign(end_y  =lambda x: R * x.end_pos_lat)
+        .assign(start_x=lambda x: SCALING_FACTOR * R * x.start_pos_long * np.cos(lat_mean))
+        .assign(start_y=lambda x: SCALING_FACTOR * R * x.start_pos_lat)
+        .assign(end_x  =lambda x: SCALING_FACTOR * R * x.end_pos_long   * np.cos(lat_mean))
+        .assign(end_y  =lambda x: SCALING_FACTOR * R * x.end_pos_lat)
     )    
     
     return (points, laps)
@@ -167,24 +168,28 @@ def plot_map(points, laps, pc="blue", lc="red", cmap='brg'):
     ax.legend(["Data points", "Laps"])
 
 
-def consistent_scale_plot(points):
+def consistent_scale_plot(points, x="x", y="y", connected=False):
     points = (
         points
         .assign(x=lambda x: x.x - x.x.mean())
         .assign(y=lambda x: x.y - x.y.mean())
     )
 
-    MAP_SIZE = 200
+    # gives a 4km buffer - should be more than enough to include warm ups. May even decrease later
+    MAP_SIZE = 2000
 
-    points.plot.scatter(x="x", 
-                        y="y",
+    ax = points.plot.scatter(x=x, 
+                        y=y,
                         c="blue",
-                        s=3,
-                        alpha=0.2,
+                        s=1,
+                        # alpha=0.15,  # 0.15
                         xlim=(-MAP_SIZE, MAP_SIZE),
                         ylim=(-MAP_SIZE, MAP_SIZE),
                         figsize=(10, 10)
     )
+
+    if connected:
+        points.plot(x, y, ax=ax)
 
 
 class Circle:

@@ -4,6 +4,8 @@ import numpy as np
 import pandas as pd
 from matplotlib import cm
 import fitdecode
+import sweat
+import matplotlib.pyplot as plt
 
 
 MARGIN = 1
@@ -35,6 +37,27 @@ def haversine(lat1, long1, lat2, long2):
     return c * R
 
 
+def read_activity(activity):
+    if activity[-3:] == "fit":
+        return read_fit(activity)
+    elif activity[-3:] == "tcx":
+        return read_tcx(activity)
+
+
+def read_tcx(activity):
+    points = pd.DataFrame(columns=['Timestamp', 'lat', 'long', 'speed', 'cadence'])
+    laps = pd.DataFrame(columns=['Timestamp', 'start_pos_lat', 'start_pos_long', 'end_pos_lat',
+                                 'end_pos_long', 'total_timer_time', 'total_distance', 'avg_speed'])
+    
+    data = sweat.read_tcx(HOME_DIR + activity)
+
+    points = data[data.lap == 0]
+    laps   = data[data.lap == 1]
+
+    return (points, laps)
+
+
+
 def get_frame_field(frame, field):
     """Checks if the frame has a specific field, returns None if not"""
     if frame.has_field(field):
@@ -42,7 +65,7 @@ def get_frame_field(frame, field):
     return None
 
 
-def read_activity(activity):
+def read_fit(activity):
     """
     Input: a string directory of an activity file
     Reads all the relevant fields for data points and lap times
@@ -169,90 +192,47 @@ def plot_map(points, laps, pc="blue", lc="red", cmap='brg'):
 
 
 def consistent_scale_plot(points, x="x", y="y", connected=False):
-    points = (
-        points
-        .assign(x=lambda x: x.x - x.x.mean())
-        .assign(y=lambda x: x.y - x.y.mean())
-    )
-
     # gives a 4km buffer - should be more than enough to include warm ups. May even decrease later
     MAP_SIZE = 2000
-
-    ax = points.plot.scatter(x=x, 
-                        y=y,
-                        c="blue",
-                        s=1,
-                        # alpha=0.15,  # 0.15
-                        xlim=(-MAP_SIZE, MAP_SIZE),
-                        ylim=(-MAP_SIZE, MAP_SIZE),
-                        figsize=(10, 10)
-    )
-
-    if connected:
-        points.plot(x, y, ax=ax)
-
-
-class Circle:
-    def __init__(self, a, b, r, top_half) -> None:
-        """
-        circle in form:
-          x = a + r cos(t)
-          y = b + r sin(t)
-
-        top_half: bool whether the circle is the top half or bottom half of the circle/track
-        """
-        self.a = a
-        self.b = b
-        self.r = r
-
-        self.fx = lambda t: self.a + self.r * np.cos(t)
-        self.fy = lambda t: self.b + self.r * np.sin(t)
-        
-        self.dydx = lambda t: -np.cos(t) / (np.sin(t))
-        self.top_half = top_half
-
-    def closest_point_on_circle(self, x1, y1):
-        """
-        Given a point, find the closest projection onto the circle
-        Return None if below/above the semi circle defined by self.top_half
-        """
-        t = np.arctan2(y1 - self.b, x1 - self.a)
-
-        if self.top_half and (t > np.pi or t < 0):
-            return None
-        elif not self.top_half and t < np.pi and t > 0:
-            return None
-        else:
-            return (self.fx(t), self.fy(t))
-
-
-def closest_point_on_track(x1, y1):
-    """
-    Projects any point onto the closest point on a 400m track. 
-    Assumes 400m track is centered at (0, 0)
     
-    400m track - standard:
-    https://www.desmos.com/calculator/sikussppqz
-    there are also tracks with shorter straights (around 80m) and 120m bends - these are ignored for now
-    """
+    if type(points) == list:
+        num_rows = 3
+        num_cols = 2
+        figure, axis = plt.subplots(num_rows, num_cols)
+        for i in range(num_rows):
+            for j in range(num_cols):
+                points[i*num_cols + j].plot.scatter(x=x, 
+                                            y=y,
+                                            c="blue",
+                                            s=1,
+                                            alpha=0.15,
+                                            xlim=(-MAP_SIZE, MAP_SIZE),
+                                            ylim=(-MAP_SIZE, MAP_SIZE),
+                                            figsize=(18, 18 * num_cols ** 2 / num_rows),  # width, height
+                                            ax=axis[i, j]
+                        )
+        return axis
 
-    r = 36.5   # radius of the circles
-    s = 84.39  # straight lengths
+    else:
+        points = (
+            points
+            .assign(x=lambda x: x.x - x.x.mean())
+            .assign(y=lambda x: x.y - x.y.mean())
+        )
 
-    # first bend
-    circle = Circle(0, s/2, r, True)
-    first_bend_point = circle.closest_point_on_circle(x1, y1)
+        ax = points.plot.scatter(x=x, 
+                            y=y,
+                            c="blue",
+                            s=1,
+                            alpha=0.15,  # 0.15
+                            xlim=(-MAP_SIZE, MAP_SIZE),
+                            ylim=(-MAP_SIZE, MAP_SIZE),
+                            figsize=(10, 10)
+        )
 
-    # back straight
-    back_straight = (-r, y1) if y1 < s/2 and y1 > -s/2 else None
+        if connected:
+            points.plot(x, y, ax=ax)
 
-    # back bend
-    circle = Circle(0, -s/2, r, False)
-    back_bend_point = circle.closest_point_on_circle(x1, y1)
-    
-    # home straight
-    home_straight = (r, y1) if y1 < s/2 and y1 > -s/2 else None
+        return ax
 
-    points = [first_bend_point, back_straight, back_bend_point, home_straight]
-    return [point for point in points if point is not None][0]
 

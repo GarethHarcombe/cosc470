@@ -174,10 +174,16 @@ def generate_track():
     else:  # generate 400m workout
         for i in range(num_laps):
             random_walk = pd.concat([random_walk, randomise_location(generate_400_section())])
+    
+    track = Track()
+    reference_points = [(0, 0), (0, track.s / 2), (0, -track.s / 2)]
 
-    random_walk = randomise_rotation(random_walk)
+    random_values = randomise_rotation(pd.concat([random_walk, pd.DataFrame(reference_points, columns=["x", "y"])]))
 
-    return random_walk
+    random_walk      = random_values.iloc[:-3]
+    reference_points = random_values.iloc[-3:]
+
+    return (random_walk, reference_points)
 
 
 def generate_warm_up():
@@ -194,7 +200,7 @@ def generate_warm_up():
 
 
 def random_map():
-    track = generate_track()
+    track, reference_points = generate_track()
 
     warm_up_skeleton = generate_warm_up()
 
@@ -204,4 +210,4 @@ def random_map():
 
     warm_up_points = randomise_points(sample(warm_up_skeleton))
     
-    return pd.concat([track, warm_up_points])
+    return (pd.concat([track, warm_up_points]), reference_points)

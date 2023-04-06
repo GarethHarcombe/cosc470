@@ -5,6 +5,17 @@ import matplotlib.pyplot as plt
 
 
 def plot_map(points, x, y, figsize, ax):
+    """
+    plot_map: plot small blue dots for each point in the GPS data
+
+    Inputs ~
+        points: pd.DataFrame of x, y coordinates to plot
+        x: string of column name of x ordinates
+        y: string of column name of y ordinates
+        figsize: (int, int) of matplotlib plot size
+        ax: matplotlib axis to plot points on
+    """
+
     # gives a 4km buffer - should be more than enough to include warm ups. May even decrease later
     MAP_SIZE = 2000
     points.plot.scatter(x=x, 
@@ -19,6 +30,17 @@ def plot_map(points, x, y, figsize, ax):
 
 
 def plot_reference(points, x, y, ax):
+    """
+    plot_reference: plot bigger red reference dots on an existing axis
+
+    Inputs ~
+        points: pd.DataFrame of x, y coordinates to plot
+        x: string of column name of x ordinates
+        y: string of column name of y ordinates
+        ax: matplotlib axis to plot points on
+
+    Outputs ~
+    """
     points.plot.scatter(x=x,
                         y=y,
                         s=3,
@@ -28,6 +50,19 @@ def plot_reference(points, x, y, ax):
 
 
 def normalise_to_mean(points, reference_points=None):
+    """
+    normalise_to_mean: center points around the mean of points
+
+    Inputs ~
+        points: pd.DataFrame of x, y coordinates to plot
+        reference_points: optional pd.DataFrame of x, y reference points to plot
+
+    Outputs ~ 
+        (points, reference_points):
+            points: pd.DataFrame with updated coordinates
+            reference_points: pd.DataFrame with updated coordinates
+    """
+
     x_mean = points.x.mean()
     y_mean = points.y.mean()
 
@@ -48,6 +83,20 @@ def normalise_to_mean(points, reference_points=None):
 
 
 def consistent_scale_plot(points, x="x", y="y", reference_points=None, connected=False):
+    """
+    consistent_scale_plot: Plot points using a consistent scale (defined in plot_map function)
+
+    Inputs ~
+        points: pd.DataFrame of x, y coordinates to plot
+        x: string of column name of x ordinates
+        y: string of column name of y ordinates
+        reference_points: optional pd.DataFrame of x, y reference points to plot
+        connected: bool, if true then consecutive points will be connected by lines
+
+    Outputs ~
+        Returns the matplotlib figure of the map
+    """
+
     if type(points) == list:
         num_rows = 3
         num_cols = 2

@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script type="text/javascript">
+
+var home = {	
+			metadata:{
+				searchCount: '5,922,083',
+				logoRelPath: '/customer_logos',
+				thirdParthAuth: false,
+				currentPage:  'document',
+				xploreVirtual:'https://ieeexplore.ieee.org',
+				isWebAccount: false,
+				isProvisioned: false,
+				globalNotification:{},
+				cart: {
+						count: 0
+				}
+			}						
+		};
+		
+
+
+
+
+
+		
+</script>
+
+<html lang="en-US">
+	<head>
+	    <meta name="google-site-verification" content="qibYCgIKpiVF_VVjPYutgStwKn-0-KBB6Gw4Fc57FZg" />
+					
+						
+				
+					
+			 
+			
+				
+		<meta name="Description" id="meta-description" content="Ambient-assisted living (AAL) is promising to become a supplement of the current care models, providing enhanced living experience to people within context-awar">
+		
+		<link rel="canonical" href="https://ieeexplore.ieee.org/abstract/document/7883880" /> 
+		
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		
+		<!-- Disable "click" touch event 300ms delay for Chrome/Firefox on Android -->
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		
+
+		<title>Improving Activity Recognition Accuracy in Ambient-Assisted Living Systems by Automated Feature Engineering | IEEE Journals &amp; Magazine | IEEE Xplore</title>
+		
+
+	
+		
+			<meta property="twitter:title" content="Improving Activity Recognition Accuracy in Ambient-Assisted Living Systems by Automated Feature Engineering" />
+			<meta property="og:title" content="Improving Activity Recognition Accuracy in Ambient-Assisted Living Systems by Automated Feature Engineering" />
+		
+		
+			<meta property="twitter:description" content="Ambient-assisted living (AAL) is promising to become a supplement of the current care models, providing enhanced living experience to people within context-aware homes and smart environments. Activity recognition based on sensory data in AAL systems is an important task because 1) it can be used for estimation of levels of physical activity, 2) it can lead to detecting changes of daily patterns that may indicate an emerging medical condition, or 3) it can be used for detection of accidents and emergencies. To be accepted, AAL systems must be affordable while providing reliable performance. These two factors hugely depend on optimizing the number of utilized sensors and extracting robust features from them. This paper proposes a generic feature engineering method for selecting robust features from a variety of sensors, which can be used for generating reliable classification models. From the originally recorded time series and some newly generated time series [i.e., magnitudes, first derivatives, delta series, and fast Fourier transformation (FFT)-based series], a variety of time and frequency domain features are extracted. Then, using two-phase feature selection, the number of generated features is greatly reduced. Finally, different classification models are trained and evaluated on an independent test set. The proposed method was evaluated on five publicly available data sets, and on all of them, it yielded better accuracy than when using hand-tailored features. The benefits of the proposed systematic feature engineering method are quickly discovering good feature sets for any given task than manually finding ones suitable for a particular task, selecting a small feature set that outperforms manually determined features in both execution time and accuracy, and identification of relevant sensor types and body locations automatically. Ultimately, the proposed method could reduce the cost of AAL systems by facilitating execution of algorithms on devices with limited resources and by using as few sensors as possible." />
+			<meta property="og:description" content="Ambient-assisted living (AAL) is promising to become a supplement of the current care models, providing enhanced living experience to people within context-aware homes and smart environments. Activity recognition based on sensory data in AAL systems is an important task because 1) it can be used for estimation of levels of physical activity, 2) it can lead to detecting changes of daily patterns that may indicate an emerging medical condition, or 3) it can be used for detection of accidents and emergencies. To be accepted, AAL systems must be affordable while providing reliable performance. These two factors hugely depend on optimizing the number of utilized sensors and extracting robust features from them. This paper proposes a generic feature engineering method for selecting robust features from a variety of sensors, which can be used for generating reliable classification models. From the originally recorded time series and some newly generated time series [i.e., magnitudes, first derivatives, delta series, and fast Fourier transformation (FFT)-based series], a variety of time and frequency domain features are extracted. Then, using two-phase feature selection, the number of generated features is greatly reduced. Finally, different classification models are trained and evaluated on an independent test set. The proposed method was evaluated on five publicly available data sets, and on all of them, it yielded better accuracy than when using hand-tailored features. The benefits of the proposed systematic feature engineering method are quickly discovering good feature sets for any given task than manually finding ones suitable for a particular task, selecting a small feature set that outperforms manually determined features in both execution time and accuracy, and identification of relevant sensor types and body locations automatically. Ultimately, the proposed method could reduce the cost of AAL systems by facilitating execution of algorithms on devices with limited resources and by using as few sensors as possible." />
+		
+		
+		
+		
+		
+		
+			<meta name="twitter:card" content="summary_large_image">			
+    	
+    	<meta property="og:image" content="https://ieeexplore.ieee.org/ielx7/6287639/7859429/7883880/graphical_abstract/access-gagraphic-2684913.jpg" />
+    	<meta property="twitter:image" content="https://ieeexplore.ieee.org/ielx7/6287639/7859429/7883880/graphical_abstract/access-gagraphic-2684913.jpg" />
+			
+			
+  		
+  		
+		
+						 	
+	
+	
+
+		
+
+
+<script src="https://www.ieee.org/content/dam/ieee-global/js/settings.js" async></script>
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.js" async></script>
+<script>
+window.addEventListener("load", function(){
+ window.cookieconsent.initialise(json)
+});
+</script>
+		
+
+
+
+
+
+ 
+
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+	
+
+	
+
+	
+	
+	
+
+	
+
+	
+
+	
+	
+	
+	
+	
+	
+
+	
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+		
+	
+
+	
+
+	
+
+	
+		
+	
+		
+		
+			
+			
+	
+
+
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+
+
+
+
+
+
+<g:compress>
+	<link rel="stylesheet" href="/assets/css/simplePassMeter.min.css?cv=20230404_000001" />
+	<link rel="stylesheet" type="text/css" media="screen, print" href="/assets/dist/ng-new/styles.css?cv=20230404_000001"/>
+	<link rel="stylesheet" type="text/css" media="screen, print" href="/assets/dist/ng-new/customStyles.css?cv=20230404_000001"/>
+	<link rel="stylesheet" href="/assets/vendor/swiper/dist/idangerous.swiper.css?cv=20230404_000001">
+	<link rel="stylesheet" type="text/css" media="screen, print" href="/assets/css/jquery-ui-1.8.19.custom.css?cv=20230404_000001"/>
+</g:compress>
+
+
+
+
+		
+
+	<script type='text/javascript'>
+		var googletag = googletag || {};
+		googletag.cmd = googletag.cmd || [];
+		(function() {
+		var gads = document.createElement('script');
+		gads.async = true;
+		gads.type = 'text/javascript';
+		var useSSL = 'https:' == document.location.protocol;
+		gads.src = (useSSL ? 'https:' : 'http:') + 
+		'//securepubads.g.doubleclick.net/tag/js/gpt.js';
+		var node = document.getElementsByTagName('script')[0];
+		node.parentNode.insertBefore(gads, node);
+		})();
+	</script>
+
+		<script type="text/javascript" src="/assets/vendor/jquery/jquery-3.5.1.min.js?cv=20230404_000001" charset="utf-8"></script>
+		
+	</head>
+	<body class="body-resp">
+
+		<div id="global-notification" class="row stats-global-notification">
+			<div class="hide u-hide-important col Notification Notification--global Notification--fixed">
+				<a href class="Notification-close js-close" aria-label="close message button"><i class="fa fa-close"></i></a>
+				<div class="Notification-header"></div>
+				<div class="Notification-text"></div>
+			</div>
+		</div>
+
+		<div id="LayoutWrapper">
+				<div class="row">
+					<div class="col">
+						
+
+
+
+
+
+
+
+
+	
+		<script type="text/javascript" src="https://cdn.jwplayer.com/libraries/6Mc4deRE.js"></script>
+	
+
+	
+
+
+<div class="Header" id="xplore-header" data-service="true" data-inst="false" data-web="false" style="display:none"></div>
+
+
+
+						<div id="global-alert-message"></div>
+						
+
+
+
+
+
+
+
+
+<meta name="cToken" content="eyJhbGciOiJIUzUxMiIsInppcCI6IkRFRiJ9.eNqqVkosKFCyUoooyMkvSlXSUcosLgZyK2Dc1AqgrKGZhYG5sYGJsQVQPrEEKmBkbm5sUQsAAAD__w.GA_mKiO5e7XOfRsGSDYmU47Wmq8VFKfFLFcrXX7l8RX7N4gxppjI82SJ8tammmSMgaPcKa3465nEebrg1xxY0g">
+
+<script type="text/javascript">
+	
+	
+	document.write('<base href="/abstract/document/" />');
+	
+	
+	
+</script>
+
+<!-- XPL-21560-Added as part of Universal CASA-Dev -->
+<script type="text/javascript" src="https://scholar.google.com/scholar_js/casa.js" async></script>
+
+<script type="text/javascript" src="https://app.cadmoremedia.com/Scripts/Embed.js"></script>
+<!--- This is a picture popup embed for mobilew view.  -->
+<script type="text/javascript" src="https://app.cadmoremedia.com/Scripts/PicturePop.js"></script>
+
+
+
+
+
+
+
+<script type="text/javascript">
+var body_rightsLink ="", body_publisher = "";
+var recordId = "";
+
+
+var AUTHOR_PROFILE = 'ON';
+if (AUTHOR_PROFILE.toUpperCase() == "OFF"){
+	var AUTHOR_PROFILE_ENABLED = false;
+}else{
+	var AUTHOR_PROFILE_ENABLED = true;
+}
+
+var xplGlobal = {
+	document: {
+		disqus:{
+			remote_auth_s3 : '',
+			public_api_key:'1lxKgMbpNIbQvfk2tqLcWeSVloE8rgIY2CV1tCu3Vp641oL4eEITYBbkViJJGNYY',
+			short_name:'ieeexplore',
+			client_url:'https://ieeexplore.ieee.org',
+			sso_enabled:'{$sessionProfile.provisioned}'
+		},
+
+		fullTextAccess: false,
+		isAccessFromInstitution: false
+		
+	}
+};
+	
+	xplGlobal.document.metadata={"userInfo":{"institute":false,"member":false,"individual":false,"guest":false,"subscribedContent":false,"fileCabinetContent":false,"fileCabinetUser":false,"institutionalFileCabinetUser":false,"showPatentCitations":true,"showGet802Link":false,"showOpenUrlLink":false,"tracked":false,"desktop":false,"delegatedAdmin":false,"isInstitutionDashboardEnabled":false,"isInstitutionProfileEnabled":false,"isRoamingEnabled":false,"isDelegatedAdmin":false,"isMdl":false,"isCwg":false,"isIel":false,"isAcademic":false},"authors":[{"name":"Eftim Zdravevski","affiliation":["Faculty of Computer Science and Engineering, Saints Cyril and Methodius University, Skopje, Macedonia"],"bio":{"graphic":"/mediastore_new/IEEE/content/freeimages/6287639/7859429/7883880/zdrav-2684913-small.gif","p":["Eftim Zdravevski received the master’s degree in data mining from the Faculty of Electrical Engineering and Information Technologies, Saints Cyril and Methodius University of Skopje Skopje, Macedonia, in 2010. He is currently pursuing the Ph.D. degree with the Faculty of Computer Science and Engineering, Saints Cyril and Methodius University of Skopje. From 2008 to 2015, he was a Developer and a Researcher with NI TEKNA-Intelligent Technologies, where he designed and implemented information systems and data warehouses, and was involved in fraud detection and other machine-learning-related projects. Since 2010, he has been a Teaching and Research Assistant with the Faculty of Computer Science and Engineering, Saints Cyril and Methodius University of Skopje. He has authored more than 30 papers in international conferences and journals. His active fields of research interests are big data, machine learning, data mining, cloud computing, expert systems, knowledge-based systems, decision support systems, intelligent information systems, data bases and data warehouses, processing of sensory data, and parallel algorithms. He has been a MENSA Member since 2004."]},"firstName":"Eftim","lastName":"Zdravevski","orcid":"0000-0001-7664-0168","id":"37888317100"},{"name":"Petre Lameski","affiliation":["Faculty of Computer Science and Engineering, Saints Cyril and Methodius University, Skopje, Macedonia"],"bio":{"graphic":"/mediastore_new/IEEE/content/freeimages/6287639/7859429/7883880/lames-2684913-small.gif","p":["Petre Lameski was born in Kavadarci, Macedonia, in 1985. He received the degree (Hons.) and the master’s degree with a thesis in robotics from the Faculty of Electrical Engineering and Information Technologies, Saints Cyril and Methodius University of Skopje, in 2008 and 2010, respectively. From 2008 to 2011, he was an Assistant with the Faculty of Electrical Engineering and Information Technologies, teaching auditory and laboratory exercises to students as an introduction to robotics, distributed computer systems, artificial intelligence, algorithms for data analysis, information systems, and mobile information systems. His research interests include intelligent robotics and computer systems, machine intelligence, cognitive systems and cognitive robotics, time series data analysis, and wireless sensor and actor systems."]},"firstName":"Petre","lastName":"Lameski","orcid":"0000-0002-5336-1796","id":"37888316200"},{"name":"Vladimir Trajkovik","affiliation":["Faculty of Computer Science and Engineering, Saints Cyril and Methodius University, Skopje, Macedonia"],"bio":{"graphic":"/mediastore_new/IEEE/content/freeimages/6287639/7859429/7883880/trajk-2684913-small.gif","p":["Vladimir Trajkovik received the Ph.D. degree from the Faculty of Computer Science and Engineering, Saints Cyril and Methodius University of Skopje, Macedonia. He is a Full Professor with the Faculty of Computer Science and Engineering, Saints Cyril and Methodius University of Skopje.","He is a Co-Founder or a Partner in four ICT companies, and has provided management consultant services and mentorship to five ICT companies in the last 15 years. For the past five years, he has been an Invited Lecturer, a Mentor, or a Judge for more than 20 events related to the promotion of novel ICT services and entrepreneurship. His research interests include information systems analyses and design, distributed systems, educational systems, ICT-based collaboration systems, and mobile services, with a special focus on educational and health care systems. He has authored or edited four books, authored more than ten chapters in international books, and more than 150 journal and conference papers. He has provided novel ICT-based services to more than 30 national and international ICT projects, and coordinated more than ten of those projects."]},"firstName":"Vladimir","lastName":"Trajkovik","id":"37297677300"},{"name":"Andrea Kulakov","affiliation":["Faculty of Computer Science and Engineering, Saints Cyril and Methodius University, Skopje, Macedonia"],"bio":{"graphic":"/mediastore_new/IEEE/content/freeimages/6287639/7859429/7883880/kulak-2684913-small.gif","p":["Andrea Kulakov received the Diploma Engineering degree (Hons.) from the Faculty of Electrical Engineering in 1995, and the M.Sc. degree in cognitive science, and the Ph.D. degree in computer science in 1998 and 2006, respectively. In 2005, as part of his Ph.D. research, he received the Walter Karplus Summer Research Grant from the IEEE Computational Intelligence Society. He is currently a Professor of Artificial Intelligence, Machine Vision, Introduction to Cognitive Science, and Introduction to Robotics at the undergraduate level and advanced topics in Artificial Intelligence and Sensor-Robotic Systems at the postgraduate level. He is also an Associate Professor with the Computer Science and Engineering Department (FINKI), Saints Cyril and Methodius University, Skopje, Macedonia Macedonia. He has authored more than 70 scientific papers in journals and conference proceedings. He led several national and international projects."]},"firstName":"Andrea","lastName":"Kulakov","id":"37294594700"},{"name":"Ivan Chorbev","affiliation":["Faculty of Computer Science and Engineering, Saints Cyril and Methodius University, Skopje, Macedonia"],"bio":{"graphic":"/mediastore_new/IEEE/content/freeimages/6287639/7859429/7883880/chorb-2684913-small.gif","p":["Ivan Chorbev was born in Ohrid, Macedonia, in 1980. He received the Ph.D. degree from the Faculty of Electrical Engineering and Information Technologies, Saints Cyril and Methodius University of Skopje, in 2009. From 2003 to 2005, he was with the Department for Software and Web Development, Macedonian Telekom—T-Home. In 2005, he was with the Faculty for Electrical Engineering, Institute for Computer Science and Engineering, Skopje. His teaching commitments included lectures in programming, web design, and computer animation. He is currently the Dean of the Faculty for Computer Science and Engineering, Skopje. In his research, he has participated in more than 85 scientific papers in books, journals, and conference proceedings. He has authored one university textbook, and was a Reviewer of another one. His research interests include combinatorial optimization, heuristic algorithms, constraint programming, web development technologies, software testing, application of computer science in medicine and telemedicine, medical expert systems, assistive technologies, knowledge extraction, and machine learning."]},"firstName":"Ivan","lastName":"Chorbev","id":"37303736700"},{"name":"Rossitza Goleva","affiliation":["Faculty of Telecommunications, Technical University of Sofia, Sofia, Bulgaria"],"bio":{"graphic":"/mediastore_new/IEEE/content/freeimages/6287639/7859429/7883880/golev-2684913-small.gif","p":["Rossitza Goleva received the M.Sc. degree in computer science and the Ph.D. degree in communication networks from the Technical University of Sofia, Bulgaria, in 1982 and 2016, respectively.","She is currently an Assistant Professor with the Department of Communication Networks, Technical University of Sofia. She is one of the main researchers with the Communication Networks Lab and is handling the design and implementation of hybrid environments, quality-of-service analysis, high-performance cloud computing, modeling and simulation of communication systems, protocol development and design, traffic engineering analyses, and traffic measurements. She has participated in many EU-funded and regional projects, including COST IC1303 Algorithms, Architectures and Platforms for Enhanced Living Environments (AAPELE) since 2013, COST IC0703 Traffic Monitoring and Analyses from 2009 to 2013, R&D projects on wireless sensor networks, especially zigbee, funded by the National Investment Fund of Bulgaria since 2010, and H2020 Project ASPIRES from 2017 to 2019. She is currently a Vice Chair of COST IC1303 AAPELE. She has taught more than 15 different courses and had long and short scholarships in Denmark, Greece, Portugal, The Netherlands, Israel, and Germany. She has authored more than 90 research papers in various conferences and journals.","Since 1999, Dr. Goleva has been active in the IEEE Bulgaria Section as a Treasurer, Secretary, Chair, and Vice Chair. She is an active Member of the IEEE Communication Society, leading currently the Communications chapter. She serves as a Reviewer of the European Commission research programs, ACM Workshop on High Performance Mobile Opportunistic Systems, ACM Symposium on Applied Computing, Journal of Transactions on Emerging Telecommunications Technologies, John Wiley & Sons, Ltd., ICT COST Action IC0906, Wireless Networking for Moving Objects (Springer, 2014), and many others. She is serving on the Editorial Board of the Journal of Network Computing and Applications, Clausius Scientific Press, Canada."]},"firstName":"Rossitza","lastName":"Goleva","id":"37085896936"},{"name":"Nuno Pombo","affiliation":["Instituto de Telecomunicações and ALLab Assisted Living Computing and Telecommunications Laboratory, Universidade da Beira Interior, Covilhã, Portugal","Universidade Lusófona de Humanidades e Tecnologias, Lisbon, Portugal"],"bio":{"graphic":"/mediastore_new/IEEE/content/freeimages/6287639/7859429/7883880/pombo-2684913-small.gif","p":["Nuno Pombo received the Ph.D. degree in computer science from the University of Beira Interior, Covilhã, Portugal, in 2014. He is currently an invited Assistant Professor with the Universidade da Beira Interior and with Universidade Lusófona de Humanidades e Tecnologias, Lisbon, Portugal. His current research interests include cloud computing, big data, data fusion, machine learning, ubiquitous computing, eHealth, clinical decision support systems, and model reduction methods. He is a member of the BSAFE LAB: Law enforcement, Justice and Public Safety Research and Technology Transfer Laboratory, and Instituto de Telecomunicações. He is also a member of COST Actions: CA15109 European Cooperation for Statistics of Network Data Science, TD1307 European Model Reduction Network, and IC1303 Algorithms, Architectures, and Platforms for Enhanced Living Environments."]},"firstName":"Nuno","lastName":"Pombo","id":"37645242300"},{"name":"Nuno Garcia","affiliation":["Instituto de Telecomunicações and ALLab Assisted Living Computing and Telecommunications Laboratory, Universidade da Beira Interior, Covilhã, Portugal","Universidade Lusófona de Humanidades e Tecnologias, Lisbon, Portugal"],"bio":{"graphic":"/mediastore_new/IEEE/content/freeimages/6287639/7859429/7883880/garci-2684913-small.gif","p":["Nuno Garcia received the B.Sc. degree (Hons.) in mathematics/informatics and the Ph.D. degree in computer science engineering from the University of Beira Interior (UBI), Covilhã, Portugal, in 2004 and 2008, respectively. He was the Founder and a Coordinator of the Assisted Living Computing and Telecommunications Laboratory, a research group within the Instituto de Telecomunicações, UBI. He was a Co-Founder with the Executive Council of the BSAFE LAB-Law enforcement, Justice and Public Safety Research and Technology Transfer Laboratory, a multidisciplinary research laboratory in UBI, where he is currently a Coordinator. He is an Assistant Professor with the Faculty of Engineering Computer Science Department, UBI, and an invited Associate Professor with the Universidade Lusófona de Humanidades e Tecnologias, Lisbon, Portugal. He is the Coordinator of the Cisco Academy, UBI, and the Chair of the COST Action IC1303 AAPELE-Architectures, Algorithms and Platforms for Enhanced Living Environments, Brussels, Belgium. He is the main author of several international, European, and Portuguese patents. His main interests include next-generation networks, algorithms for bio-signal processing, and distributed and cooperative protocols. He is a member of the Non-Commercial Users Constituency, a group within GNSO in ICANN. He is also a member of ISOC."]},"firstName":"Nuno","lastName":"Garcia","id":"37288660500"}],"issn":[{"format":"Electronic ISSN","value":"2169-3536"}],"articleNumber":"7883880","dbTime":"2 ms","metrics":{"citationCountPaper":107,"citationCountPatent":0,"totalDownloads":4042},"sponsors":[{"packageNumber":0,"name":"IEEE","url":"http://www.ieee.org/index.html"}],"purchaseOptions":{"showOtherFormatPricingTab":false,"showPdfFormatPricingTab":true,"pdfPricingInfoAvailable":true,"otherPricingInfoAvailable":false,"mandatoryBundle":false,"optionalBundle":false,"displayTextWhenOtherFormatPricingNotAvailable":"The purchase and pricing options for this item are unavailable. Select items are only available as part of a subscription package. You may try again later or <a href='https://ieeexplore.ieee.org/xpl/contact' target='_blank'>contact us</a> for more information.","pdfPricingInfo":[{"memberPrice":"$14.95","nonMemberPrice":"$33.00","partNumber":"7883880","type":"PDF/HTML"}]},"getProgramTermsAccepted":false,"sections":{"abstract":"true","authors":"true","figures":"true","multimedia":"false","references":"true","citedby":"true","keywords":"true","definitions":"false","algorithm":"false","dataset":"false","cadmore":"false","footnotes":"false","disclaimer":"false","relatedContent":"false","metrics":"true"},"graphicalAbstract":{"summary":"Improving Activity Recognition Accuracy in Ambient Assisted Living Systems by Automated Feature Engineering and Selection of Relevant Sensors.","type":"graphic","fileSize":"44KB","file":"/ielx7/6287639/7859429/7883880/graphical_abstract/access-gagraphic-2684913.jpg","coverImage":"/ielx7/6287639/7859429/7883880/graphical_abstract/access-gagraphic-2684913.jpg"},"formulaStrippedArticleTitle":"Improving Activity Recognition Accuracy in Ambient-Assisted Living Systems by Automated Feature Engineering","abstract":"Ambient-assisted living (AAL) is promising to become a supplement of the current care models, providing enhanced living experience to people within context-aware homes and smart environments. Activity recognition based on sensory data in AAL systems is an important task because 1) it can be used for estimation of levels of physical activity, 2) it can lead to detecting changes of daily patterns that may indicate an emerging medical condition, or 3) it can be used for detection of accidents and emergencies. To be accepted, AAL systems must be affordable while providing reliable performance. These two factors hugely depend on optimizing the number of utilized sensors and extracting robust features from them. This paper proposes a generic feature engineering method for selecting robust features from a variety of sensors, which can be used for generating reliable classification models. From the originally recorded time series and some newly generated time series [i.e., magnitudes, first derivatives, delta series, and fast Fourier transformation (FFT)-based series], a variety of time and frequency domain features are extracted. Then, using two-phase feature selection, the number of generated features is greatly reduced. Finally, different classification models are trained and evaluated on an independent test set. The proposed method was evaluated on five publicly available data sets, and on all of them, it yielded better accuracy than when using hand-tailored features. The benefits of the proposed systematic feature engineering method are quickly discovering good feature sets for any given task than manually finding ones suitable for a particular task, selecting a small feature set that outperforms manually determined features in both execution time and accuracy, and identification of relevant sensor types and body locations automatically. Ultimately, the proposed method could reduce the cost of AAL systems by facilitating execution of algorithms on devices with limited resources and by using as few sensors as possible.","pubLink":"/xpl/RecentIssue.jsp?punumber=6287639","allowComments":true,"displayPublicationDate":"21 March 2017","publicationYear":"2017","doi":"10.1109/ACCESS.2017.2684913","dateOfInsertion":"21 March 2017","publicationTitle":"IEEE Access","displayPublicationTitle":"IEEE Access","pdfPath":"/iel7/6287639/7859429/07883880.pdf","startPage":"5262","endPage":"5280","publicationDate":"2017","issueLink":"/xpl/tocresult.jsp?isnumber=7859429&punumber=6287639","doiLink":"https://doi.org/10.1109/ACCESS.2017.2684913","pdfUrl":"/stamp/stamp.jsp?tp=&arnumber=7883880","keywords":[{"type":"IEEE Keywords","kwd":["Feature extraction","Windows","Activity recognition","Sensor phenomena and characterization","Robustness","Ambient assisted living"]},{"type":"INSPEC: Controlled Indexing","kwd":["assisted living","body sensor networks","fast Fourier transforms","feature extraction","feature selection","health care","medical computing","pattern classification","time series"]},{"type":"INSPEC: Non-Controlled Indexing","kwd":["activity recognition accuracy","ambient-assisted living systems","automated feature engineering","care models","context-aware homes","smart environments","sensory data","physical activity","medical condition","robust feature extraction","reliable classification models","time series","fast Fourier transformation-based series","delta series","time domain feature extraction","frequency domain feature extraction","two-phase feature selection","robust feature selection","FFT","body locations"]},{"type":"Author Keywords ","kwd":["Feature extraction","time series analysis","ambient intelligence","wearable sensors","sensor fusion","pattern recognition","data mining","data preprocessing","body sensor networks"]}],"isReadingRoomArticle":false,"isGetArticle":false,"isGetAddressInfoCaptured":false,"isMarketingOptIn":false,"topic":"Emergent Topics for Mobile and Ubiquitous Systems in Smartphone, IoT, and Cloud Computing Era","pubTopics":[{"name":"Aerospace"},{"name":"Bioengineering"},{"name":"Communication, Networking and Broadcast Technologies"},{"name":"Components, Circuits, Devices and Systems"},{"name":"Computing and Processing"},{"name":"Engineered Materials, Dielectrics and Plasmas"},{"name":"Engineering Profession"},{"name":"Fields, Waves and Electromagnetics"},{"name":"General Topics for Engineers"},{"name":"Geoscience"},{"name":"Nuclear Engineering"},{"name":"Photonics and Electrooptics"},{"name":"Power, Energy and Industry Applications"},{"name":"Robotics and Control Systems"},{"name":"Signal Processing and Analysis"},{"name":"Transportation"}],"publisher":"IEEE","xploreDocumentType":"Journals & Magazine","displayDocTitle":"Improving Activity Recognition Accuracy in Ambient-Assisted Living Systems by Automated Feature Engineering","isCustomDenial":false,"isNotDynamicOrStatic":false,"htmlAbstractLink":"/document/7883880/","isSAE":false,"isPromo":false,"isSMPTE":false,"isOUP":false,"isNow":false,"isConference":false,"volume":"5","isProduct":false,"isSpringer":false,"htmlLink":"/document/7883880/","accessionNumber":"16870813","isEarlyAccess":false,"isJournal":true,"isBook":false,"isBookWithoutChapters":false,"isChapter":false,"isStaticHtml":false,"isOpenAccess":true,"isEphemera":false,"persistentLink":"https://ieeexplore.ieee.org/servlet/opac?punumber=6287639","isFreeDocument":true,"isDynamicHtml":true,"isStandard":false,"startPage":"5262","fundingAgencies":{"fundingAgency":[{"fundingName":"Faculty of Computer Science and Engineering at the Saints. Cyril and Methodius University, Skopje, Macedonia"},{"fundingName":"networking activities provided by the ICT COST Action IC1303 AAPELE"},{"fundingName":"Program FCT","grantNumber":"UID/EEA/50008/2013"}]},"subjectCategories":["Computers and information processing","Computational and artificial intelligence","Sensors","Signal processing"],"openAccessFlag":"T","insertDate":"21 March 2017","ephemeraFlag":"false","title":"Improving Activity Recognition Accuracy in Ambient-Assisted Living Systems by Automated Feature Engineering","accessionNumber":"16870813","html_flag":"false","ml_html_flag":"true","sourcePdf":"access-zdravevski-2684913-x.pdf","displayPublicationDate":"21 March 2017","mlTime":"PT0.083026S","xplore-pub-id":"6287639","pdfPath":"/iel7/6287639/7859429/07883880.pdf","isNumber":"7859429","contentType":"periodicals","publicationDate":"2017","publicationNumber":"6287639","citationCount":"107","xplore-issue":"7859429","topics":["Emergent Topics for Mobile and Ubiquitous Systems in Smartphone, IoT, and Cloud Computing Era"],"articleId":"7883880","publicationTitle":"IEEE Access","sections":{"abstract":"true","authors":"true","figures":"true","multimedia":"false","references":"true","citedby":"true","keywords":"true","definitions":"false","algorithm":"false","dataset":"false","cadmore":"false","footnotes":"false","disclaimer":"false","relatedContent":"false","metrics":"true"},"volume":"5","contentTypeDisplay":"Journals","publicationYear":"2017","subType":"IEEE Journal","_value":"OAPA","lastupdate":"2023-03-16","mediaPath":"/mediastore_new/IEEE/content/media/6287639/7859429/7883880","endPage":"5280","displayPublicationTitle":"IEEE Access","doi":"10.1109/ACCESS.2017.2684913"};
+
+
+
+	xplGlobal.document.snippet="true";
+
+
+
+
+
+
+</script>
+
+
+
+<div class="ng2-app">
+	
+	
+		<!-- <xpl-searchbar show-count="false"></xpl-searchbar> -->
+	
+	<div class="global-content-wrapper">
+		<xpl-root>
+			<div class="Spinner"></div>
+		</xpl-root>
+	</div>
+	
+	<!-- START: Angular 2+ Migration: Due to Angualr2+ migration AngualrJs router place holder commented -->
+<!-- 	<div ng-show="stateIsLoading" class="Spinner"></div>
+	<div ui-view class="{{stateIsLoading ? 'loading': ''}}"
+		autoscroll="false"></div>
+ -->	<!-- END: Angular 2+ Migration-->
+</div>
+
+						
+
+
+
+
+<section id="xploreFooter">
+	
+	<div class="Footer stats-footer hide-mobile">
+		<div class="pure-g Footer-sections">
+			<div class="pure-u-1-4">
+				<h3 class="Footer-header">IEEE Account</h3>
+				<ul class="Footer-list">
+					<li><a href="https://www.ieee.org/profile/changeusrpwd/showChangeUsrPwdPage.html?refSite=http://ieeexplore.ieee.org&refSiteName=IEEE Xplore">Change Username/Password</a></li>
+					<li><a href="https://www.ieee.org/profile/address/getAddrInfoPage.html?refSite=http://ieeexplore.ieee.org&refSiteName=IEEE Xplore">Update Address</a></li>
+				</ul>
+			</div>
+			<div class="pure-u-1-4">
+				<h3 class="Footer-header">Purchase Details</h3>
+				<ul class="Footer-list">
+					<li><a href="https://www.ieee.org/profile/payment/showPaymentHome.html?refSite=http://ieeexplore.ieee.org&refSiteName=IEEE Xplore">Payment Options</a></li>
+					<li><a href="https://www.ieee.org/profile/vieworder/showOrderHistory.html?refSite=http://ieeexplore.ieee.org&refSiteName=IEEE Xplore">Order History</a></li>
+					<li><a href="/articleSale/purchaseHistory.jsp">View Purchased Documents</a></li>
+				</ul>
+			</div>
+			<div class="pure-u-1-4">
+				<h3 class="Footer-header">Profile Information</h3>
+				<ul class="Footer-list">
+					<li><a href="https://www.ieee.org/ieee-privacyportal/app/ibp?refSite=http://ieeexplore.ieee.org&refSiteName=IEEE Xplore">Communications Preferences</a></li>
+					<li><a href="https://www.ieee.org/profile/profedu/getProfEduInformation.html?refSite=http://ieeexplore.ieee.org&refSiteName=IEEE Xplore">Profession and Education</a></li>
+					<li><a href="https://www.ieee.org/profile/tips/getTipsInfo.html?refSite=http://ieeexplore.ieee.org&refSiteName=IEEE Xplore">Technical Interests</a></li>
+				</ul>
+			</div>
+			<div class="pure-u-1-4">
+				<h3 class="Footer-header">Need Help?</h3>
+				<ul class="Footer-list">
+					<li><strong>US &amp; Canada:</strong> +1 800 678 4333</li>
+					<li><strong>Worldwide: </strong> +1 732 981 0060<br>
+					</li>
+					<li><a href="/xpl/contact">Contact &amp; Support</a></li>
+				</ul>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-12 Footer-bottom">
+				<div class="Footer-bottom-inner-div row">
+					<div class="col">
+						<ul class="Menu Menu--horizontal Menu--dividers u-mb-1">
+							<li class="Menu-item"><a href="/Xplorehelp/about-ieee-xplore.html">About IEEE <em>Xplore</em></a></li>
+							<li class="Menu-item"><a href="/xpl/contact">Contact Us</a></li>
+							<li class="Menu-item"><a href="/Xplorehelp/Help_start.html" target="blank">Help</a></li>
+							<li class="Menu-item"><a href="/Xplorehelp/accessibility-statement.html" target="blank">Accessibility</a></li> 
+							<li class="Menu-item"><a href="/Xplorehelp/Help_Terms_of_Use.html" target="_blank">Terms of Use</a></li>
+							<li class="Menu-item"><a href="http://www.ieee.org/web/aboutus/whatis/policies/p9-26.html">Nondiscrimination Policy</a></li>
+							<li class="Menu-item"><a href="/xpl/sitemap.jsp">Sitemap</a></li>
+							<li class="Menu-item"><a href="http://www.ieee.org/about/help/security_privacy.html" target="blank">Privacy &amp; Opting Out of Cookies</a></li>
+						</ul>
+						<p class="Footer-bottom-terms">
+							A not-for-profit organization, IEEE is the world's largest technical professional organization dedicated to advancing technology for the benefit of humanity.<br>&copy; Copyright 2023 IEEE - All rights reserved. Use of this web site signifies your agreement to the terms and conditions.
+						</p>
+					</div>
+
+					<div><i class="logo-ieee-white"></i></div>
+				</div>
+				
+			</div>
+		</div>
+	</div>
+
+	
+	
+</section>
+
+						<!-- BEGIN: tealium in v2/common/template.jsp. We need to include tealiumAnalytics.js here since Angular 2+ app load if you load after commnon.js then tealium value will not be available in angular 2+ app  -->
+						
+
+
+
+
+
+
+		<!-- BEGIN: TealiumAnalytics.jsp -->
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+			
+				
+			
+			
+			
+			
+		
+		
+		
+		
+		
+		
+
+			<script type ="text/javascript">
+ 				// tealium config vars
+				var TEALIUM_CONFIG_TAGGING_ENABLED = true;		
+				var TEALIUM_CONFIG_CDN_URL = '//tags.tiqcdn.com/utag/';
+				var TEALIUM_CONFIG_ACCOUNT_PROFILE_ENV = 'ieeexplore/main/prod';
+				
+				// tealium utag_data values for user 
+				var TEALIUM_userType = 'Anonymous';
+				var TEALIUM_userInstitutionId = '';
+				var TEALIUM_userId = '';
+				var TEALIUM_user_third_party = '';
+				
+				var TEALIUM_products = '';
+			</script>
+
+
+			<script type="text/javascript">
+			// asynchronously load tealium's utag.js , which declares tealium JS variables like; utag_data, utag
+			(function(a,b,c,d){
+			
+				a=TEALIUM_CONFIG_CDN_URL + TEALIUM_CONFIG_ACCOUNT_PROFILE_ENV + '/utag.js';
+				b=document;c='script';d=b.createElement(c);d.src=a;
+				d.type='text/java'+c;d.async=true;
+				a=b.getElementsByTagName(c)[0];a.parentNode.insertBefore(d,a);
+			})();
+			</script>
+
+			<script type="text/javascript" src="/assets/js/analytics/tealiumTagsData.js?cv=20230404_000001"></script>
+			<script type="text/javascript" src="/assets/js/analytics/tealiumAnalytics.js?cv=20230404_000001"></script>
+
+
+		
+ 		
+		<!-- END: TealiumAnalytics.jsp -->
+			 
+
+						<!-- END: tealium in v2/common/template.jsp -->
+						
+
+
+
+
+
+
+
+<script type="text/javascript" src="/xploreAssets/MathJax-274/MathJax.js?config=default"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/assets/css/ie7Sniffer.css?cv=20230404_000001">
+<script type="text/javascript" src="/assets/vendor/js-cookie/src/js.cookie.js?cv=20230404_000001"></script>
+<script type="text/javascript" src="/assets/vendor/fingerprintjs2/fingerprint2.js?cv=20230404_000001"></script>
+<script type="text/javascript" src="/assets/js/lib/core/fingerprint.js?cv=20230404_000001"></script>
+
+<!-- START OF Angular bundle assets -->
+<script type="text/javascript" src='/assets/dist/ng-new/runtime.js?cv=20230404_000001' defer charset="utf-8"></script>
+<script type="text/javascript" src='/assets/dist/ng-new/polyfills.js?cv=20230404_000001' defer charset="utf-8"></script>
+
+<script type="text/javascript" src='/assets/dist/ng-new/main.js?cv=20230404_000001' defer charset="utf-8"></script>
+<!-- END OF Angular bundle assets -->
+
+<!-- Usabilla Combicode for IEEE-->
+<!-- Begin Usabilla for Websites embed code -->
+<script type="text/javascript">/*{literal}<![CDATA[*/window.lightningjs||function(c){function g(b,d){d&&(d+=(/\?/.test(d)?"&":"?")+"lv=1");c[b]||function(){var i=window,h=document,j=b,g=h.location.protocol,l="load",k=0;(function(){function b(){a.P(l);a.w=1;c[j]("_load")}c[j]=function(){function m(){m.id=e;return c[j].apply(m,arguments)}var b,e=++k;b=this&&this!=i?this.id||0:0;(a.s=a.s||[]).push([e,b,arguments]);m.then=function(b,c,h){var d=a.fh[e]=a.fh[e]||[],j=a.eh[e]=a.eh[e]||[],f=a.ph[e]=a.ph[e]||[];b&&d.push(b);c&&j.push(c);h&&f.push(h);return m};return m};var a=c[j]._={};a.fh={};a.eh={};a.ph={};a.l=d?d.replace(/^\/\//,(g=="https:"?g:"http:")+"//"):d;a.p={0:+new Date};a.P=function(b){a.p[b]=new Date-a.p[0]};a.w&&b();i.addEventListener?i.addEventListener(l,b,!1):i.attachEvent("on"+l,b);var q=function(){function b(){return["<head></head><",c,' onload="var d=',n,";d.getElementsByTagName('head')[0].",d,"(d.",g,"('script')).",i,"='",a.l,"'\"></",c,">"].join("")}var c="body",e=h[c];if(!e)return setTimeout(q,100);a.P(1);var d="appendChild",g="createElement",i="src",k=h[g]("div"),l=k[d](h[g]("div")),f=h[g]("iframe"),n="document",p;k.style.display="none";e.insertBefore(k,e.firstChild).id=o+"-"+j;f.frameBorder="0";f.id=o+"-frame-"+j;/MSIE[ ]+6/.test(navigator.userAgent)&&(f[i]="javascript:false");f.allowTransparency="true";l[d](f);try{f.contentWindow[n].open()}catch(s){a.domain=h.domain,p="javascript:var d="+n+".open();d.domain='"+h.domain+"';",f[i]=p+"void(0);"}try{var r=f.contentWindow[n];r.write(b());r.close()}catch(t) { f[i]=p+'d.write("'+b().replace(/"/g,String.fromCharCode(92)+'"')+'");d.close();'}a.P(2)}; a.l&&setTimeout(q,0)})()}();c[b].lv="1";return c[b]}var o="lightningjs",k=window[o]=g(o);k.require=g;k.modules=c}({}); if(!navigator.userAgent.match(/Android|BlackBerry|BB10|iPhone|iPad|iPod|Opera Mini|IEMobile/i)) {window.usabilla_live = lightningjs.require("usabilla_live", "//w.usabilla.com/e9930a118e08.js"); } else {window.usabilla_live = lightningjs.require("usabilla_live", "//w.usabilla.com/118ca38ae742.js"); }/*]]>{/literal}*/</script>
+<!-- end usabilla live embed code -->
+
+
+<!-- START: Bombora tagging integration XPL-25079-->
+<script type="text/javascript">
+	(function (w,d,t) {
+		_ml = w._ml || {};
+		_ml.eid = '82420';
+		var s, cd, tag; s = d.getElementsByTagName(t)[0]; cd = new Date();
+		tag = d.createElement(t); tag.async = 1;
+		tag.src = 'https://ml314.com/tag.aspx?' + cd.getDate() + cd.getMonth();
+		s.parentNode.insertBefore(tag, s);
+	})(window,document,'script');
+</script>
+<!-- END: Bombora Tagging Integration-->
+
+
+
+	
+
+		
+		
+
+		
+		
+		
+
+		
+			
+		
+		
+		
+
+		
+
+		
+		
+
+
+		
+
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	
+	
+
+
+
+
+
+
+<div style="width: 1263px;" id="popup_overlay"></div>
+
+<g:compress>
+
+
+
+
+
+
+
+
+		
+		
+			
+				
+					
+					
+								<script type="text/javascript" src='/assets/vendor/modernizr/modernizr.js?cv=20230404_000001' charset="utf-8"></script>
+					
+								
+			
+				
+					
+					
+								<script type="text/javascript" src='/assets/js/vendor.js?cv=20230404_000001' charset="utf-8"></script>
+					
+								
+			
+				
+					
+						
+
+
+
+
+
+
+
+
+ 
+
+<script>
+	var $j = jQuery.noConflict();
+	var j$ = jQuery.noConflict();
+	var membershipIncomplete;
+    var IS_INDIVIDUAL_USER=false;
+
+	var searchPropertiesParamQueryText = 'queryText';
+	var searchPropertiesParamNewSearch = 'newsearch';
+	var searchPropertiesParamMatchBoolean = 'matchBoolean';
+	var searchPropertiesParamSearchWithin = 'searchWithin';
+	var searchInterfaceArticleIndexTermReference = 'Search_Index_Terms';
+	var searchPropertiesParamRecordsPerPage = 'rowsPerPage';
+	var searchPropertiesParamPageNumber = 'pageNumber';
+	var searchPropertiesParamRemoveRefinement = 'removeRefinement';	
+	var searchPropertiesParamSearchField = 'searchField';
+	var searchPropertiesParamArticleNumber = 'arnumber';
+	
+	var authorsGetDisplay = 'Authors';
+	var authorsFirstNameProperty = 'First Name';
+	var authorsLastNameProperty = 'Last Name';
+	var authorsMiddleNameProperty = 'Middle Name';
+	var pubTitleDispNameProperty = 'Publication Title';
+	var volumeDispNameProperty = 'Volume';
+	var issueDispNameProperty = 'Issue';
+	var startPageDispNameProperty = 'Start Page';
+	var endPageDispNameProperty = 'Start Page';
+
+	var searchIcsTermProperty = 'Standards ICS Terms';
+	var SearchMapperParamSearchField = 'searchField';
+	
+	var SearchMapperParamNewSearch = 'newsearch';
+	var SearchMapperParamArticleNumber = 'arnumber';	
+		
+	
+	
+	var NTPT_IMAGE_LOCATION = '';
+	var XPLORE_SSL_HOST = 'https://ieeexplore.ieee.org';	
+	
+	var SSL_YES_NO = 'yes';
+	if (SSL_YES_NO.toUpperCase() == "NO"){
+		var XPLORE_SSL_YES_NO = false;
+	}else{
+		var XPLORE_SSL_YES_NO = true;
+	}
+	var WEBSERVICES_SSL_YES_NO = 'yes';
+	if (WEBSERVICES_SSL_YES_NO.toUpperCase() == "NO"){
+		var XPLORE_WEBSERV_YES_NO = false;
+	}else{
+		var XPLORE_WEBSERV_YES_NO = true;
+	}
+	
+	var AUTHOR_PROFILE = 'ON';
+	if (AUTHOR_PROFILE.toUpperCase() == "OFF"){
+		var AUTHOR_PROFILE_ENABLED = false;
+	}else{
+		var AUTHOR_PROFILE_ENABLED = true;
+	}
+
+	var IMAGE_SEARCH_FLAG = 'OFF';
+	if (IMAGE_SEARCH_FLAG.toUpperCase() == "ON"){
+		var IMAGE_SEARCH_ENABLED = true;
+	} else {
+		var IMAGE_SEARCH_ENABLED = false;
+	}
+	
+	var ILN_ENABLED = true;
+	
+	
+	var IBP_MEMBEER_SIGNIN_TIME_WAIT_IN_MILLIES = '800';
+	var ASSETS_RELATIVE_PATH = '/assets'; // NOTE: AngularJS code relies on this
+	var ASSETS_RELATIVE_PATH_NO_SERVER = '/assets';
+	var ASSETS_VERSION = '20230404_000001'; // NOTE: AngularJS code relies on this
+	var IBP_WS_ASSETS='https://www.ieee.org';
+	var IBP_WS_ENABLED_FLAG = true;
+	var ENTERPRISE_CART_URL = 'https://www.ieee.org/cart/public/myCart/page.html?refSite=http://ieeexplore.ieee.org&refSiteName=IEEE%20Xplore';
+	var IEEE_USER_INFO_COOKIE = 'ieeeUserInfoCookie';
+	
+	var ACC_MGMT_NEW = true;
+	if (! XPLORE_WEBSERV_YES_NO) {
+		var ACC_MGMT_NEW = 'false';
+	}
+	var ACC_MGMT_CREATE_URL = 'https://www.ieee.org/profile/public/createwebaccount/showCreateAccount.html?ShowMGAMarkeatbilityOptIn=true&sourceCode=xplore&car=IEEE-Xplore&autoSignin=Y';
+	var ACC_MGMT_FORGOT_PASSWD_URL = 'https://www.ieee.org/profile/public/forgotpassword/forgotUsernamePassword.html?sourceCode=xplore';
+
+	var SPECIAL_CHARACTER_MAPS = '&:.AND.,=:.EQ.,+:.PLS.,#:.HSH.';
+	var SPECIAL_CHARACTERS = new Array();
+	var SPECIAL_CHARACTER_REPLACEMENTS = new Array();
+	var characterMaps = SPECIAL_CHARACTER_MAPS.split(",");
+	for (var i = 0; i < characterMaps.length; i++) {
+		parts = characterMaps[i].split(":");
+		SPECIAL_CHARACTERS[i] = parts[0];
+		SPECIAL_CHARACTER_REPLACEMENTS[i] = parts[1];
+	}
+
+	var MAX_WILDCARDS = '8';
+	var MAX_SEARCH_TERMS = '25';
+	var ALL_SEARCH_FIELDS = 'Search_Index_Terms:Index Terms,Search_All_Text:Full Text & Metadata,Search_All:All Metadata,fullText:Full Text Only,Search_Publication_Title:Search Publication Title,Search_Related_Terms:Search Related Terms,Search_Authors:Author Name,Search_Standard_Ics_Title:ICE Terms,Search_Unsilo:Search Unsilo,Search_Unsilo_Index_Terms:Index Terms,Search_Inspec:Search Inspec,Search_Inspec_Index_Terms:Index Terms,Search_Mai:Search Mai,Search_Mai_Index_Terms:Index Terms,promoTopic:Custom Search,id:Article Number,moduleNumber:Module Number,part_num:Part_Num,issn:ISSN,isbn:ISBN,eisbn:EISBN,issueId:IS Number,pubIssueId:Pub Issue Id,accessionNumber:Accession Number,copyrightHolder:Copyright Holder,copyrightYear:Copyright Year,license:License,documentAbstract:Abstract,publicationId:Publication Number,parentPublicationId:Parent Publication Number,parentId:Parent Id,standardArticleId:Standard Article Id,title:Document Title,parentTitle:Parent Publication Title,parentDisplayTitle:Parent Display Title,publicationTitle:Publication Title,publicationDisplayTitle:Publication Display Title,volume:Volume,issue:Issue,paddedIssueNumber:Padded Issue Number,part:Part,startPage:Start Page,endPage:End Page,filePath:File Path,publicationDate:Publication Date,PublicationYear:Publication Year,onlineDate:Online Date,month:Month,Author:Author Pref Names,authorNormNames:Author Norm Names,author:Authors,authorIds:Author Ids,firstName:First Name,middleName:Middle Name,lastName:Last Name,authorAffiliations:Author Affiliations,authorBio:Author Bio,authorImg:Author Img,referenceCount:Reference Count,citationCount:Citation Count,downloadCount:Download Count,patentCount:Patent Count,multimediaFlag:Multimedia Flag,biomedicalEngFlag:Biomedical Eng Flag,nonIeee:Non IEEE,stdsProductNumber:STDS Product Number,bmsProductNumber:Bms Product Number,status:Status,doi:DOI,articleDoi:Article DOI,publicationDoi:Publication DOI,pdfPath:Pdf Path,pdfSize:Pdf Size,contentSubtype:Content Subtype,Publisher:Publisher,ControlledTerms:INSPEC Controlled Terms,freeTerms:INSPEC Non-Controlled Terms,ieeeTerms:IEEE Terms,authorTerms:Author Keywords,maiTerms:MAI Terms,meshTerms:Mesh_Terms,pacsTerms:PACS Terms,insertDate:Insert Date,ConferenceLocation:Conference Location,indexContent:Index Content,coden:CODEN,documentText:Document Text,standardNumber:Standard Number,preprintFlag:Preprint Flag,rapidPostFlag:Rapid Post Flag,lastUpdate:Last Update,newFlag:New Flag,openAccessFlag:Open Access Flag,publicationOpenAccess:Publication Open Access,promoFlag:Promo Flag,pubmedId:Pubmed Id,duration:Duration,society:Society,conference:Conference,ConferenceCountry:ConferenceCountry,conferenceStartDate:Conference Start Date,conferenceEndDate:Conference End Date,societyUrl:Society URL,idSubject:Id Subject,bookNumber:Book Number,pages:Pages,editionNumber:Edition Number,sequence:Sequence,relatedInfoType:Related Info Type,relatedInfo:Related Info,formatIsbn:Format ISBN,meetingDate:Meeting Date,courseLevel:Course level,courseParts:Course Parts,courseId:Course ID,aboutUrl:About Url,additionalUrl:Additional Url,authorsUrl:Authors Url,openAccessUrl:Open Access Url,openAccessFlag:Open Access flag,partnumVendorurlMediatype:Partnum VendorURL MediaType,brandingImageFile:Branding Image File,coverImageFile:Cover Image File,latestIssueCoverImage:Latest Issue Cover Image,frequency:Frequency,fieldOfInterest:Field Of Interest,gParentPublicationNumber:G Parent Publication Number,msUrl:Ms Url,publicationRelationship:Relationship,societyImage:Society Image,visitUrl:Visit Url,visitWebsite:Visit Website,startYear:Start Year,endYear:End Year,publicationInactive:Publication Inactive,recordType:Record Type,epub:Epub,picCodeDescription:Pic Code Description,picCode:Pic Code,sponsors:Sponsors,issueNotes:Notes,conferenceDate:Conference Date,publicationContact:Publication Contact,isbuyable:isBuyable,standardRelationships:Standard Relationships,unavailableForSale:Unavailable for Sale,availableForSale:Available for Sale,standardFamily:Standard Family,standardGroup:Standard Group,productUrl:Product Url,isbnMediatype:ISBN MediaType,htmlFlag:Html Flag,rightslinkFlag:Rightslink Flag,pageCount:Page Count,name:Name,tableOfContents:Table of Contents,timeStamp:Time Stamp,subTitle:Sub Title,relatedItem:Related Item,referenceMaterial:Reference Material,latestIssueTime:Latest Issue Time,startYear:First Published Year,insertDate:Search Latest Date,pbdFlag:Pbd Flag,lmsUrl:Lms Url,currentVolume:Current Volume,graphicalFile:Graphical File,graphicalCoverImage:Graphical Cover Image,graphicalSummary:Graphical Summary,graphicalType:Graphical Type,graphicalAbstractFile:Graphical Abstract File,graphicalAbstractImage:Graphical Abstract Image,graphicalAbstractType:Graphical Abstract Type,graphicalAbstractSummary:Graphical Abstract Summary,authorNativeNames:Native Name,externalId:Article Page Number,standardBundles:Standard Bundles,standardBundleParts:Standard Bundle Parts,virtualTitle:Virtual Title,seriesName:Series Name,seriesId:Series Id,mlHtmlFlag:ML Html flag,promoDates:Promo Dates,promoStartDate:Promo Start Date,promoEndDate:Promo End Date,issueCompleteFlag:Issue Complete Flag,scope:Scope,purpose:Purpose,standardFamilyTitle:Standard Family Title,thumbnailImg:Thumbnail Img,supplementFile:Supplement File,courseFile:Course File,supplement:Supplement,courseAuthor:Course Author,pdhs:Pdhs,ceus:Ceus,courseFirstFrame:FirstFrame Img,idSubTopic:Id Sub Topic,certificateUrl:Certificate Url,standardRoot:Standard Root,icsTerms:Standards ICS Terms,impactStatement:Impact Statement,plagiarizedFlag:Plagiarized Flag,affirmedDate:Affirmed Date,sourcePdf:Source Pdf,orcid:Author ORCID,algorithmFlag:Algorithm Flag,fundingAgency:Funding Agency,funder:Funder,pricingKey:Map Pricing Key,publicationRollup:Rollup Key,collection:Collection,previewImage:Preview Image,regularDate:Regular Date,ContentType:Content Type,ringgoldIds:Ringgold ID,figures:Figures,mediaPath:Media Path,publicationVolumeOnly:Publication Volume Only,Search_All:All Metadata,Search_All_Text:Full Text & Metadata,fullText:Full Text Only,TypeAheadTerms:Type Ahead Terms,IeeeTerm:IEEE Term,ContentType:Content Type,Author:Author,Affiliation:Affiliation,Topic:Topic,PublicationTitle:Publication Title,PublicationYear:Year,Publisher:Publisher,ConferenceCountry:Conference Country,ConferenceLocation:Conference Location,StandardStatus:Standard Status,ConferenceYear:Conference Year,PublicationPackage:Subscribed Content,StandardPackage:Standard Package,ReadingRoom:Reading Room,StandardTitle:Standard Title,StdDictionaryTerms:Standards Dictionary Terms,TitleRange:Publication Range,StandardRange:Standard Range,RecordType:Record Type,MediaType:Media Type,BookType:Book Type,CourseType:Course Type,PublicationStandardRange:Publication Standard Range,PerpetualYear:Perpetual Year,OpacTitleRange:Opac Title Range,BookSeries:Book Series,SubjectCategory:Subject Category,Sessions:Sessions,TypeAheadPublication:Type Ahead Publication,SubTopic:Sub Topic,CourseDuration:Course Duration,CourseLevel:Course Level,StandardType:Standard Type,StandardSubtype:Standard SubType,StandardModifier:Standard Modifier,IcsTerms1:Ics Terms 1,IcsTerms2:Ics Terms 2,IcsTerms3:Ics Terms 3,SupplementalItem:Supplemental Items,CourseDuration:Course Duration,SpecialSection:Topics,SocietySection:Society Sections,ControlledTerms:Publication Topics';
+	var SEARCH_FIELD_REFERENCES = new Array();
+	var SEARCH_FIELD_DISPLAYS = new Array();
+	var searchFields = ALL_SEARCH_FIELDS.split(",");
+	for (var j = 0; j < searchFields.length; j++) {
+		parts = searchFields[j].split(":");
+		SEARCH_FIELD_REFERENCES[j] = parts[0];
+		SEARCH_FIELD_DISPLAYS[j] = parts[1];
+	}
+	
+
+	var refSite='https://ieeexplore.ieee.org';
+	var refSiteName="IEEE Xplore";
+	var applicationName = 'Xplore';
+	var MC_OPERATION_DELAY_TIMEOUT='5000';
+	var MC_ADDING_DELAY_MSG='Please wait.The selected item(s) is being added to the cart.';
+	var MC_TIMEOUT='60000';
+	var MC_OPERATION_DELAY_MSG_FLAG='true';
+
+	var MEMBER_PROFILE_CHANGE_USERNAMEPASS_LINK = 'https://www.ieee.org/profile/changeusrpwd/showChangeUsrPwdPage.html?refSite=http://ieeexplore.ieee.org&refSiteName=IEEE Xplore';
+	var MEMBER_MY_PROFILE ='https://www.ieee.org/profile/myprofile/myprofile.html?refSite=http://ieeexplore.ieee.org&refSiteName=IEEE Xplore';
+	var MEMBER_PROFILE_ADDRESSINFO_LINK = 'https://www.ieee.org/profile/address/getAddrInfoPage.html?refSite=http://ieeexplore.ieee.org&refSiteName=IEEE Xplore';
+	var MEMBER_PROFILE_PAYMENTINFO_LINK = 'https://www.ieee.org/profile/payment/showPaymentHome.html?refSite=http://ieeexplore.ieee.org&refSiteName=IEEE Xplore';
+	var MEMBER_PROFILE_ORDER_HISTORY_LINK = 'https://www.ieee.org/profile/vieworder/showOrderHistory.html?refSite=http://ieeexplore.ieee.org&refSiteName=IEEE Xplore';
+	var MEMBER_USER_COMMUNICATION_LINK = 'https://www.ieee.org/ieee-privacyportal/app/ibp?refSite=http://ieeexplore.ieee.org&refSiteName=IEEE Xplore';
+	var MEMBER_EDUCATIONAL_PROFILE_LINK = 'https://www.ieee.org/profile/profedu/getProfEduInformation.html?refSite=http://ieeexplore.ieee.org&refSiteName=IEEE Xplore';
+	var MEMBER_TECHNICAL_INTERESTS_LINK = 'https://www.ieee.org/profile/tips/getTipsInfo.html?refSite=http://ieeexplore.ieee.org&refSiteName=IEEE Xplore';
+	var HELPFILE_RELATIVE_PATH = '/Xplorehelp';
+	
+	//content types
+	var CONTENT_TYPE_PARAM = 'contentType';
+	var CONTENT_TYPE_BOOKS = 'Books';
+	var CONTENT_TYPE_COURSES = 'Courses';
+	var CONTENT_TYPE_STANDARDS = 'Standards';
+	var CONTENT_TYPE_CONFERENCES = 'Conferences';
+	var CONTENT_TYPE_JOURNALS = 'Journals';
+	var CONTENT_TYPE_EARLY_ACCESS = 'Early Access Articles';
+	
+	//User Preferences
+	var citFormat = "";
+	var dlFormat = "";
+	var myProjectLimit = 15;
+	var myProjectDocumentLimit = 1000;
+	var myProjectDocumentTagLimit = 50;
+	
+	
+	//Google ReCaptcha public Key 
+	var RECAPTCHA_PUBLIC_KEY = '6Ld6GEUUAAAAALdaAmeGUhZyz1KFFHnd5oCaTW-t';
+
+	var seamlessAccessPersistenceUrl = 'https://service.seamlessaccess.org/ps/';
+</script>
+
+					
+					
+								
+			
+				
+					
+					
+								
+			
+				
+					
+					
+								<script type="text/javascript" src='/assets/dist/js/history.js?cv=20230404_000001' charset="utf-8"></script>
+					
+								
+			
+				
+					
+					
+								<script type="text/javascript" src='/assets/js/lib/conditional/cartScroll.js?cv=20230404_000001' charset="utf-8"></script>
+					
+								
+			
+				
+					
+					
+								<script type="text/javascript" src='/assets/js/lib/conditional/minicart.js?cv=20230404_000001' charset="utf-8"></script>
+					
+								
+			
+				
+					
+					
+								<script type="text/javascript" src='/assets/dist/js/core.js?cv=20230404_000001' charset="utf-8"></script>
+					
+								
+			
+				
+					
+					
+								<script type="text/javascript" src='/assets/dist/js/ads.js?cv=20230404_000001' charset="utf-8"></script>
+					
+								
+			
+				
+					
+					
+								<script type="text/javascript" src='/assets/dist/js/master.js?cv=20230404_000001' charset="utf-8"></script>
+					
+								
+			
+		
+	
+
+
+
+
+
+
+<script>
+
+j$('document').ready(function(){
+	if (Cookies.get('legacyUserName')) {
+		if (IBP_WS_ENABLED_FLAG){
+			Modal.refreshLegacyAccountTransition('/xpl/mwLegacyAccountTransition.jsp');
+		}
+	}
+});
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+</g:compress>
+
+
+
+
+
+
+
+
+		
+			
+					
+			
+					
+			
+					
+			
+				
+					
+
+
+
+
+
+
+
+<script>
+	// Get/Set XPL namespace.
+	window.xpl = window.xpl || {};
+	
+	// Set constants/application properties.
+	xpl.properties = { 
+			collabratec: { 
+					url: 'https://ieee-collabratec.ieee.org/app/library'
+			}
+	};
+	
+	xpl.properties.details = {
+			oqs: ''
+	};
+</script>
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+		
+		
+	
+
+
+
+
+
+	<!--Begin Optional Configuration-->
+	<script type="text/javascript" src='https://www.ieee.org/ieee-mashup/js/common/jquery.json-2.2.min.js'></script>
+	<script type="text/javascript" src="https://www.ieee.org/ieee-mashup/js/common/postmessage-min.js" ></script>
+	<script type="text/javascript" src='https://www.ieee.org/ieee-mashup/js/common/jquery.cookie-min.js'></script>
+	<script type="text/javascript" src="https://www.ieee.org/ieee-mashup/js/auth/ieee-auth-constants-min.js"></script>
+	<script type="text/javascript" src="https://www.ieee.org/ieee-mashup/js/auth/ieee-auth-include-min.js" ></script>
+	<script type="text/javascript" src='https://www.ieee.org/ieee-mashup/js/minicart/ieee-mini-cart-constants-min.js'></script>
+
+
+	<script type="text/javascript" src='https://www.ieee.org/ieee-mashup/js/minicart/ieee-mashup-util-min.js'></script>
+	<script type="text/javascript" src="https://www.ieee.org/ieee-mashup/js/common/jquery.ba-jqmq-min.js"></script>
+	<script type="text/javaScript" src="https://www.ieee.org/ieee-mashup/js/minicart/ieee-minicart-include-min.js"> </script>
+
+	<!--End Optional Configuration-->
+
+
+
+
+<!-- Removed due to network issues when loading in China -->
+<!-- <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=ra-5005a435228f9245" async="async"></script>-->
+
+<!-- Load Mathjax and process the document for Mathjax characters -->
+
+
+<!-- <script type="text/javascript" src="/xploreAssets/MathJax-274/MathJax.js?config=default"></script> -->
+
+
+<script defer>
+	MathJax.Hub.Queue(["Typeset", MathJax.Hub, document.body]);
+</script>
+
+
+
+					</div>
+				</div>
+
+			
+				<script>
+					// set $ alias back to jQuery because noConflict mode is used in legacy pages
+					window.$ = jQuery;
+				</script>
+			
+		</div><!-- /#LayoutWrapper -->
+	</body>
+</html>

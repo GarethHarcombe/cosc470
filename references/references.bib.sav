@@ -17,7 +17,7 @@
 '
 @Misc{science4performance2018,
   author       = {Gavin Francis},
-  howpublished = {{science4performance}},
+  howpublished = {science4performance},
   month        = aug,
   title        = {Strava – {Automatic} {Lap} {Detection}},
   year         = {2018},
@@ -262,6 +262,42 @@ https://www.sciencedirect.com/science/article/pii/S0968090X21002771},
   author = {Garmin},
   title  = {RINEX Logging with the GPSMAP 66, 86 Series and Montana 700 Series},
   url    = {https://support.garmin.com/en-NZ/?faq=7iMJZdoCcM2562XlKlMC76},
+}
+
+'
+@Article{Nweke2018,
+  author     = {Nweke, Henry Friday and Teh, Ying Wah and Al-garadi, Mohammed Ali and Alo, Uzoma Rita},
+  journal    = {Expert Systems with Applications},
+  title      = {Deep learning algorithms for human activity recognition using mobile and wearable sensor networks: {State} of the art and research challenges},
+  year       = {2018},
+  issn       = {0957-4174},
+  month      = sep,
+  pages      = {233--261},
+  volume     = {105},
+  abstract   = {Human activity recognition systems are developed as part of a framework to enable continuous monitoring of human behaviours in the area of ambient assisted living, sports injury detection, elderly care, rehabilitation, and entertainment and surveillance in smart home environments. The extraction of relevant features is the most challenging part of the mobile and wearable sensor-based human activity recognition pipeline. Feature extraction influences the algorithm performance and reduces computation time and complexity. However, current human activity recognition relies on handcrafted features that are incapable of handling complex activities especially with the current influx of multimodal and high dimensional sensor data. With the emergence of deep learning and increased computation powers, deep learning and artificial intelligence methods are being adopted for automatic feature learning in diverse areas like health, image classification, and recently, for feature extraction and classification of simple and complex human activity recognition in mobile and wearable sensors. Furthermore, the fusion of mobile or wearable sensors and deep learning methods for feature learning provide diversity, offers higher generalisation, and tackles challenging issues in human activity recognition. The focus of this review is to provide in-depth summaries of deep learning methods for mobile and wearable sensor-based human activity recognition. The review presents the methods, uniqueness, advantages and their limitations. We not only categorise the studies into generative, discriminative and hybrid methods but also highlight their important advantages. Furthermore, the review presents classification and evaluation procedures and discusses publicly available datasets for mobile sensor human activity recognition. Finally, we outline and explain some challenges to open research problems that require further research and improvements.},
+  doi        = {10.1016/j.eswa.2018.03.056},
+  file       = {:nweke_deep_2018 - Deep Learning Algorithms for Human Activity Recognition Using Mobile and Wearable Sensor Networks_ State of the Art and Research Challenges.html:URL},
+  keywords   = {Deep learning, Mobile and wearable sensors, Human activity recognition, Feature representation, Review},
+  language   = {en},
+  shorttitle = {Deep learning algorithms for human activity recognition using mobile and wearable sensor networks},
+  url        = {https://www.sciencedirect.com/science/article/pii/S0957417418302136},
+  urldate    = {2023-04-05},
+}
+
+'
+@Article{Wang2016,
+  author   = {Wang, Zhelong and Wu, Donghui and Chen, Jianming and Ghoneim, Ahmed and Hossain, Mohammad Anwar},
+  journal  = {IEEE Sensors Journal},
+  title    = {A {Triaxial} {Accelerometer}-{Based} {Human} {Activity} {Recognition} via {EEMD}-{Based} {Features} and {Game}-{Theory}-{Based} {Feature} {Selection}},
+  year     = {2016},
+  issn     = {1558-1748},
+  month    = may,
+  number   = {9},
+  pages    = {3198--3207},
+  volume   = {16},
+  abstract = {In recent years, sensor-based human activity recognition has attracted lots of studies. This paper presents a single wearable triaxial accelerometer-based human activity recognition system, which can be used in the real life of activity monitoring. The sensor is attached around different parts of the body: waist and left ankle, respectively. In order to improve the accuracy and reduce the computational complexity, the ensemble empirical mode decomposition (EEMD)-based features and the feature selection (FS) method are introduced, respectively. Considering the feature interaction, a game theory-based FS method is proposed to evaluate the features. Relevant and distinguished features that are robust to the placement of sensors are selected. In the experiment, the data acquired from the two different parts of the body, waist and ankle, are utilized to evaluate the proposed FS method. To verify the effectiveness of the proposed method, k-nearst neighbor and support vector machine are used to recognize the human activities from waist and ankle. Experiment results demonstrate the effectiveness of the introduced EEMD-based features for human activity recognition. Compared with the representative FS methods, including Relief-F and minimum-redundancy maximum-relevance, the proposed FS approach selects fewer features and provides higher accuracy. The results also show that the triaxial accelerometer around the waist produces optimal results.},
+  doi      = {10.1109/JSEN.2016.2519679},
+  keywords = {Feature extraction, Sensors, Accelerometers, White noise, Biomedical monitoring, Empirical mode decomposition, Game theory, Human Activity Recognition, Game Theory, Feature Selection, Human activity recognition, game theory, feature selection, wearable triaxial accelerometer, EEMD},
 }
 
 @Comment{jabref-meta: databaseType:bibtex;}

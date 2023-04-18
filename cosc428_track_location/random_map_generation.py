@@ -4,6 +4,11 @@ from random import randint
 from track import Track
 
 
+SAMPLING_STD_DEV = 4
+MACRO_STD_DEV = 8
+FULL_TRACK_T = 10.907  # parametric value of t for the full track rotation
+
+
 def random_out_and_back():
     """
     random_out_and_back: generates a random walk out and back. 
@@ -45,8 +50,6 @@ def out_and_back():
     Outputs ~
         pd.DataFrame of x, y skeleton points defining the corners of the walk
     """
-    MEAN = 0
-    STD_DEV = 4
     forward_num_steps = randint(5, 15)
     random_walk = pd.DataFrame(index=range(forward_num_steps * 2 - 1), columns=["x", "y"])
 
@@ -55,8 +58,8 @@ def out_and_back():
     for i in range(1, forward_num_steps):
         rand_vect = (randint(-50, 500), randint(-100, 100))
         random_walk.iloc[i] = rand_vect
-        random_walk.iloc[-i] = (-rand_vect[0] + np.random.normal(loc=MEAN, scale=STD_DEV), 
-                                -rand_vect[1] + np.random.normal(loc=MEAN, scale=STD_DEV))
+        random_walk.iloc[-i] = (np.random.normal(loc=-rand_vect[0], scale=MACRO_STD_DEV), 
+                                np.random.normal(loc=-rand_vect[1], scale=MACRO_STD_DEV))
     
     random_walk = (
         random_walk
@@ -99,6 +102,42 @@ def loop():
     return random_walk
 
 
+def small_loop():
+    """
+    small_loop: generates a set of random small loops.
+
+    Outputs ~
+        pd.DataFrame of x, y skeleton points defining the corners of the walk
+    """
+    num_laps = randint(3, 5)
+
+    CORNERS = [(70, 100), (70, -250), (-70, -250), (-70, 100)]
+
+    random_walk = pd.DataFrame(index=range(num_laps * 4), columns=["x", "y"])
+
+    for i in range(0, 4 * num_laps):
+        point = CORNERS[i % 4]
+        random_walk.iloc[i] = (np.random.normal(loc=point[0], scale=MACRO_STD_DEV), 
+                               np.random.normal(loc=point[1], scale=MACRO_STD_DEV))
+
+    return random_walk
+
+
+def circular_warm_up():
+    """
+    
+    """
+    SCALER = 1.4
+    track, _, _ = generate_track(8)
+
+    return (
+        randomise_location(track)
+        .assign(x=lambda df: df.x * SCALER)
+        .assign(y=lambda df: df.y * SCALER)
+    )
+
+
+
 def sample(df):
     """
     sample: given a df of skeleton points, sample a point every STEP_SIZE meters
@@ -136,9 +175,8 @@ def randomise_location(df):
     Outputs ~ 
         df: pd.DataFrame of randomised points
     """
-    STD_DEV = 1
-    df.x = np.random.normal(loc=df['x'], scale=STD_DEV)
-    df.y = np.random.normal(loc=df['y'], scale=STD_DEV)
+    df.x = np.random.normal(loc=df['x'], scale=SAMPLING_STD_DEV)
+    df.y = np.random.normal(loc=df['y'], scale=SAMPLING_STD_DEV)
     return df
 
 
@@ -176,8 +214,6 @@ def randomise_points(df):
     """
     return randomise_location(randomise_rotation(df))
 
-
-FULL_TRACK_T = 10.907  # parametric value of t for the full track rotation
 
 def generate_400_section():
     """
@@ -228,7 +264,7 @@ def generate_200_section():
     return None
 
 
-def generate_track():
+def generate_track(UPPER_LIMIT=16):
     """
     generate_track: generate random points in the shape of a track
     This is done by generating a random number of 400m or 200m sections
@@ -238,7 +274,7 @@ def generate_track():
         reference_points: pd.DataFrame of reference points. This includes the center point, and the northmost point
         bbox: pd.DataFrame of the bounding box for the track 
     """
-    num_laps = randint(2, 16)
+    num_laps = randint(2, UPPER_LIMIT)
 
     random_walk = pd.DataFrame(columns=["x", "y"])
 
@@ -252,15 +288,19 @@ def generate_track():
     
     track = Track()
     reference_points = [(0, 0), (0, track.s / 2), (0, -track.s / 2)]
-    bbox = [(track.r, track.s / 2), (-track.r, -track.s / 2 - track.r)]
+    bbox = [(-track.r, -track.s / 2 - track.r), (-track.r, track.s / 2 + track.r),
+            ( track.r,  track.s / 2 + track.r), (track.r, -track.s / 2 - track.r)]
 
     random_values = randomise_rotation(pd.concat([random_walk, 
                                                   pd.DataFrame(reference_points, columns=["x", "y"]),
                                                   pd.DataFrame(bbox, columns=["x", "y"])]))
 
-    random_walk      = random_values.iloc[:-5]
-    reference_points = random_values.iloc[-5:-2]
-    bbox             = random_values.iloc[-2:]
+    random_walk      = random_values.iloc[:-7]
+    reference_points = random_values.iloc[-7:-4]
+    bbox             = random_values.iloc[-4:]
+    
+    bounding_box = [(bbox.x.min(), bbox.y.max()), (bbox.x.max(), bbox.y.min())]
+    bbox = pd.DataFrame(bounding_box, columns=["x", "y"])
 
     # choose the north most point, drop the southern point
     if reference_points.iloc[1].y > reference_points.iloc[2].y:
@@ -280,10 +320,14 @@ def generate_warm_up():
     """
     rand_num = np.random.random()
 
-    if rand_num < 0.3:  # random out and back
+    if rand_num < 0.2:  # random out and back
         points = random_out_and_back()
-    elif rand_num < 0.6: 
+    elif rand_num < 0.4: 
         points = out_and_back()
+    elif rand_num < 0.6:
+        points = small_loop()
+    elif rand_num < 0.8:
+        points = circular_warm_up()
     else:
         points = loop()
     

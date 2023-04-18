@@ -4,7 +4,7 @@ from matplotlib import cm
 import matplotlib.pyplot as plt
 
 
-def plot_map(points, x, y, figsize, ax):
+def plot_map(points, x, y, figsize, ax, MAP_SIZE=2000):
     """
     plot_map: plot small blue dots for each point in the GPS data
 
@@ -17,7 +17,6 @@ def plot_map(points, x, y, figsize, ax):
     """
 
     # gives a 4km buffer - should be more than enough to include warm ups. May even decrease later
-    MAP_SIZE = 2000
     points.plot.scatter(x=x, 
                         y=y,
                         c="blue",
@@ -82,7 +81,7 @@ def normalise_to_mean(points, reference_points=None):
     return (points, reference_points)
 
 
-def consistent_scale_plot(points, x="x", y="y", reference_points=None, connected=False):
+def consistent_scale_plot(points, x="x", y="y", reference_points=None, connected=False, MAP_SIZE=2000):
     """
     consistent_scale_plot: Plot points using a consistent scale (defined in plot_map function)
 
@@ -108,7 +107,7 @@ def consistent_scale_plot(points, x="x", y="y", reference_points=None, connected
                 else:
                     points[i*num_cols + j], reference_points[i*num_cols + j] = normalise_to_mean(points[i*num_cols + j], reference_points[i*num_cols + j])
 
-                plot_map(points[i*num_cols + j], x, y, (18, 18 * num_cols ** 2 / num_rows), axis[i, j])
+                plot_map(points[i*num_cols + j], x, y, (18, 18 * num_cols ** 2 / num_rows), axis[i, j], MAP_SIZE=MAP_SIZE)
                 
                 if reference_points is not None:
                     plot_reference(reference_points[i*num_cols + j], x, y, axis[i, j])
@@ -119,7 +118,7 @@ def consistent_scale_plot(points, x="x", y="y", reference_points=None, connected
         points, reference_points = normalise_to_mean(points, reference_points)
         
         figure, ax = plt.subplots()
-        plot_map(points, x, y, (10, 10), ax)
+        plot_map(points, x, y, (10, 10), ax, MAP_SIZE=MAP_SIZE)
 
         if reference_points is not None:
             plot_reference(reference_points, x, y, ax)

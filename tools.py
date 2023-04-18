@@ -42,6 +42,8 @@ def read_activity(activity):
         return read_fit(activity)
     elif activity[-3:] == "tcx":
         return read_tcx(activity)
+    elif activity[-4:] == "xlsx":
+        return read_xlsx(activity)
 
 
 def read_tcx(activity):
@@ -56,6 +58,12 @@ def read_tcx(activity):
 
     return (points, laps)
 
+
+def read_xlsx(activity):
+    points = pd.read_excel(HOME_DIR + activity, sheet_name="points")
+    laps   = pd.read_excel(HOME_DIR + activity, sheet_name="laps")
+
+    return (points, laps)
 
 
 def get_frame_field(frame, field):

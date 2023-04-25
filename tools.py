@@ -6,6 +6,7 @@ from matplotlib import cm
 import fitdecode
 import sweat
 import matplotlib.pyplot as plt
+import utm
 
 
 MARGIN = 1
@@ -73,6 +74,13 @@ def get_frame_field(frame, field):
     return None
 
 
+def to_xy(lats, longs):
+    lst = []
+    for lat, long in zip(lats, longs):
+        lst.append(utm.from_latlon(lat, long)[:2])
+    return pd.DataFrame(lst, columns=["x", "y"])
+
+
 def read_fit(activity):
     """
     Input: a string directory of an activity file
@@ -127,9 +135,7 @@ def read_fit(activity):
                                                'speed':     speed,
                                                'cadence':   (cadence + frac_cadence) * 2}])
                         points = pd.concat([points, entry], axis=0, ignore_index=True)
-    
-    lat_mean = np.cos(points.lat.mean())
-    SCALING_FACTOR = 16
+
 
     # why we need to divide by 2**32 / 360:
     # https://gis.stackexchange.com/questions/371656/garmin-fit-coordinate-system
@@ -138,10 +144,8 @@ def read_fit(activity):
         .assign(lat =lambda x: x.lat / (2**32 / 360))
         .assign(long=lambda x: x.long / (2**32 / 360))
 
-        # project roughly onto x y plane
-        # https://stackoverflow.com/questions/16266809/convert-from-latitude-longitude-to-x-y 
-        .assign(x=lambda x: SCALING_FACTOR * R * x.long * np.cos(lat_mean))
-        .assign(y=lambda x: SCALING_FACTOR * R * x.lat)
+        .assign(x=lambda x: to_xy(x.lat, x.long).x)
+        .assign(y=lambda x: to_xy(x.lat, x.long).y)
 
         # center the points - need to decide a reasonable place to center (such as center of track)
         # .assign(x=lambda x: x.x - x.x.min())
@@ -155,10 +159,10 @@ def read_fit(activity):
         .assign(end_pos_lat   =lambda x: x.end_pos_lat    / (2**32 / 360))
         .assign(end_pos_long  =lambda x: x.end_pos_long   / (2**32 / 360))
 
-        .assign(start_x=lambda x: SCALING_FACTOR * R * x.start_pos_long * np.cos(lat_mean))
-        .assign(start_y=lambda x: SCALING_FACTOR * R * x.start_pos_lat)
-        .assign(end_x  =lambda x: SCALING_FACTOR * R * x.end_pos_long   * np.cos(lat_mean))
-        .assign(end_y  =lambda x: SCALING_FACTOR * R * x.end_pos_lat)
+        .assign(start_x=lambda x: to_xy(x.start_pos_lat, x.start_pos_long).x)
+        .assign(start_y=lambda x: to_xy(x.start_pos_lat, x.start_pos_long).y)
+        .assign(end_x  =lambda x: to_xy(x.end_pos_lat,   x.end_pos_long).x)
+        .assign(end_y  =lambda x: to_xy(x.end_pos_lat,   x.end_pos_long).y)
     )    
     
     return (points, laps)

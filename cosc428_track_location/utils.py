@@ -1,3 +1,5 @@
+# Code from here https://github.com/pytorch/vision/tree/main/references/detection
+
 import datetime
 import errno
 import os

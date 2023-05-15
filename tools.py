@@ -11,7 +11,7 @@ import utm
 
 MARGIN = 1
 R = 6371 # Radius of earth in kilometers. Use 3956 for miles. Determines return value units.
-HOME_DIR = "/home/gareth/Documents/Uni/2023/cosc470/"
+HOME_DIR = "/csse/users/grh102/Documents/cosc470/"
 
 
 def haversine(lat1, long1, lat2, long2):

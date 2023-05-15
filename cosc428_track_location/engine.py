@@ -5,11 +5,10 @@ import time
 import torch
 import torchvision.models.detection.mask_rcnn
 import utils
-from coco_eval import CocoEvaluator
-from coco_utils import get_coco_api_from_dataset
 
 
 def train_one_epoch(model, optimizer, data_loader, device, epoch, print_freq, scaler=None):
+    """ Trains model for one epoch"""
     model.train()
     metric_logger = utils.MetricLogger(delimiter="  ")
     metric_logger.add_meter("lr", utils.SmoothedValue(window_size=1, fmt="{value:.6f}"))
@@ -60,31 +59,22 @@ def train_one_epoch(model, optimizer, data_loader, device, epoch, print_freq, sc
     return metric_logger
 
 
-def _get_iou_types(model):
-    model_without_ddp = model
-    if isinstance(model, torch.nn.parallel.DistributedDataParallel):
-        model_without_ddp = model.module
-    iou_types = ["bbox"]
-    if isinstance(model_without_ddp, torchvision.models.detection.MaskRCNN):
-        iou_types.append("segm")
-    if isinstance(model_without_ddp, torchvision.models.detection.KeypointRCNN):
-        iou_types.append("keypoints")
-    return iou_types
-
-
 @torch.inference_mode()
 def evaluate(model, data_loader, device):
+    """Evaluate the model by running test images through it and calculating RMSE
+    Returns the worst performing image for debugging """
     n_threads = torch.get_num_threads()
-    # FIXME remove this and make paste_masks_in_image run on the GPU
+
     torch.set_num_threads(1)
     cpu_device = torch.device("cpu")
     model.eval()
     metric_logger = utils.MetricLogger(delimiter="  ")
     header = "Test:"
+    squared_error = 0
 
-    coco = get_coco_api_from_dataset(data_loader.dataset)
-    iou_types = _get_iou_types(model)
-    coco_evaluator = CocoEvaluator(coco, iou_types)
+    worst_image_error = None
+    worst_image = None
+    worst_preds = None
 
     for images, targets in metric_logger.log_every(data_loader, 100, header):
         images = list(img.to(device) for img in images)
@@ -97,19 +87,32 @@ def evaluate(model, data_loader, device):
         outputs = [{k: v.to(cpu_device) for k, v in t.items()} for t in outputs]
         model_time = time.time() - model_time
 
-        res = {target["image_id"].item(): output for target, output in zip(targets, outputs)}
+        try:
+            pred_keys = outputs[0]["keypoints"][0]
+            test_keys = targets[0]["keypoints"][0]
+
+            error = ((pred_keys[0][0] - test_keys[0][0]) ** 2 + (pred_keys[1][0] - test_keys[1][0]) ** 2 +   # x differences
+                    (pred_keys[0][1] - test_keys[0][1]) ** 2 + (pred_keys[1][1] - test_keys[1][1]) ** 2)    # y differences
+
+            if worst_image_error is None or error > worst_image_error:
+                worst_image_error = error
+                worst_image = images
+                worst_preds = outputs
+
+            squared_error += error
+        except:
+            squared_error += 100
+           
         evaluator_time = time.time()
-        coco_evaluator.update(res)
+
         evaluator_time = time.time() - evaluator_time
         metric_logger.update(model_time=model_time, evaluator_time=evaluator_time)
 
     # gather the stats from all processes
     metric_logger.synchronize_between_processes()
-    print("Averaged stats:", metric_logger)
-    coco_evaluator.synchronize_between_processes()
 
-    # accumulate predictions from all images
-    coco_evaluator.accumulate()
-    coco_evaluator.summarize()
+    print("RMSE:", (squared_error / len(data_loader)) ** 0.5)
+    print("Averaged stats:", metric_logger)
+
     torch.set_num_threads(n_threads)
-    return coco_evaluator
+    return worst_image[0], worst_preds[0]

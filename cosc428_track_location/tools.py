@@ -4,7 +4,7 @@ from matplotlib import cm
 import matplotlib.pyplot as plt
 
 
-def rotate_points(df, theta):
+def rotate_points(df, theta, x_col="x", y_col="y"):
     """
     rotate_points: rotates all points around the origin a random amount
 
@@ -19,10 +19,10 @@ def rotate_points(df, theta):
 
     c, s = np.cos(theta), np.sin(theta)
     j = np.array([[c, s], [-s, c]])
-    m = np.dot(j, [df.x, df.y])
+    m = np.dot(j, [df[x_col], df[y_col]])
 
-    df.x = m[0]
-    df.y = m[1]
+    df[x_col] = m[0]
+    df[y_col] = m[1]
     return df
 
 

@@ -11,41 +11,48 @@ def estimate_track_location(points):
             fastest_points.y.min() + (fastest_points.y.max() - fastest_points.y.min()) / 2)
 
 
+def transform_points(points, x, y, theta, x_col="x", y_col="y"):
+    translated_points = (
+        points
+        .assign(x=lambda df: df[x_col] - x)
+        .assign(y=lambda df: df[y_col] - y)
+    )
+
+    return rotate_points(translated_points, theta, x_col, y_col)
+
+
+def add_track_cols(points):
+    track = Track()
+        
+    projected_points = pd.DataFrame(index=range(len(points.x)), columns=["x", "y"])
+    for i in range(len(projected_points)):
+        projected_points.iloc[i] = track.project(points.x[i], points.y[i])
+
+    # TODO: make this more efficient, can calculate projected points in one go
+    new_points = (
+        points
+        .assign(track_x=projected_points.x)
+        .assign(track_y=projected_points.y)
+        .assign(dist_to_track=lambda df: ((df.track_x - df.x) ** 2 + (df.track_y - df.y) ** 2) ** 0.5)
+    )
+    return new_points
+
+
+
 def track_location(points, init=None):
 
     def track_error(params):
         x, y, theta = params
-        track = Track()
-        translated_points = (
-            points
-            .assign(x=lambda df: df.x - x)
-            .assign(y=lambda df: df.y - y)
-        )
+        new_points = transform_points(points, x, y, theta)
 
-        new_points = rotate_points(translated_points, theta)
-        projected_points = pd.DataFrame(index=range(len(new_points.x)), columns=["x", "y"])
-        for i in range(len(projected_points)):
-            projected_points.iloc[i] = track.project(new_points.x[i], new_points.y[i])
-
-        # TODO: make this more efficient, can calculate projected points in one go
-        error_calcs = (
-            new_points
-            .assign(proj_x=projected_points.x)
-            .assign(proj_y=projected_points.y)
-            .assign(dist=lambda df: ((df.proj_x - df.x) ** 2 + (df.proj_y - df.y) ** 2) ** 0.5)
-            .assign(error=lambda df: (df.dist < 3))
-            # .assign(error=lambda df: df.is_close * df.dist)
-            # .assign(error=lambda df: df.dist)
-        )
+        error_calcs = add_track_cols(new_points).assign(error=lambda df: (df.dist_to_track < 3))
 
         return -error_calcs.error.sum()
-        # return error_calcs.error.sum()
     
 
     if init is None:
         estimate = estimate_track_location(points)
         init = np.array([estimate[0], estimate[1], 0])
-        # init = np.array([points.x.mean(), points.y.mean(), 0])
 
     avg_speed = points.speed.mean()
 

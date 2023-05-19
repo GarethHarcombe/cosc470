@@ -114,5 +114,7 @@ class Track:
         home_straight = self.home_straight.project(x1, y1)
 
         points = [first_bend_point, back_straight, back_bend_point, home_straight]
-        return [point for point in points if point is not None][0]
+        filtered_p = [point for point in points if point is not None]
+
+        return filtered_p[np.argmin([(point[0] - x1) ** 2 + (point[1] - y1) ** 2 for point in filtered_p])]
 

@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 from random import randint
 from track import Track
+from tools import rotate_points
 
 
 SAMPLING_STD_DEV = 4
@@ -190,16 +191,9 @@ def randomise_rotation(df):
     Outputs ~
         df: pd.DataFrame of rotated points
     """
-    # https://academo.org/demos/rotation-about-point/ 
     angle = np.random.random() * 2 * np.pi
 
-    c, s = np.cos(angle), np.sin(angle)
-    j = np.array([[c, s], [-s, c]])
-    m = np.dot(j, [df.x, df.y])
-
-    df.x = m[0]
-    df.y = m[1]
-    return df
+    return rotate_points(df, angle)
 
 
 def randomise_points(df):

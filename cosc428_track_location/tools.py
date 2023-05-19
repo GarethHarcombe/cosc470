@@ -4,6 +4,28 @@ from matplotlib import cm
 import matplotlib.pyplot as plt
 
 
+def rotate_points(df, theta):
+    """
+    rotate_points: rotates all points around the origin a random amount
+
+    Inputs ~
+        df: pd.DataFrame of points to be rotated
+        theta: float of angle to rotate points
+
+    Outputs ~
+        df: pd.DataFrame of rotated points
+    """
+    # https://academo.org/demos/rotation-about-point/ 
+
+    c, s = np.cos(theta), np.sin(theta)
+    j = np.array([[c, s], [-s, c]])
+    m = np.dot(j, [df.x, df.y])
+
+    df.x = m[0]
+    df.y = m[1]
+    return df
+
+
 def plot_map(points, x, y, figsize, ax, MAP_SIZE=2000):
     """
     plot_map: plot small blue dots for each point in the GPS data
@@ -21,7 +43,7 @@ def plot_map(points, x, y, figsize, ax, MAP_SIZE=2000):
                         y=y,
                         c="blue",
                         s=1,
-                        alpha=0.15,
+                        # alpha=0.3,
                         xlim=(-MAP_SIZE, MAP_SIZE),
                         ylim=(-MAP_SIZE, MAP_SIZE),
                         figsize=figsize,  # width, height

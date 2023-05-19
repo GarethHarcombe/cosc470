@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 import utm
 
 
-MARGIN = 1
+MARGIN = 30
 R = 6371 # Radius of earth in kilometers. Use 3956 for miles. Determines return value units.
 HOME_DIR = "/home/gareth/Documents/Uni/2023/cosc470/"
 
@@ -141,6 +141,7 @@ def read_fit(activity):
     # https://gis.stackexchange.com/questions/371656/garmin-fit-coordinate-system
     points = (
         points
+        .assign(speed=lambda x: x.speed.astype(float))
         .assign(lat =lambda x: x.lat / (2**32 / 360))
         .assign(long=lambda x: x.long / (2**32 / 360))
 

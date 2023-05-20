@@ -3,6 +3,8 @@
 from matplotlib import cm
 import matplotlib.pyplot as plt
 
+
+# Margin in meters between plotted points and edge of the image
 MARGIN = 30
 
 

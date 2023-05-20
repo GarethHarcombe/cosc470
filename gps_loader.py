@@ -12,6 +12,9 @@ import numpy as np
 torch.manual_seed(0)
 RUN_TYPES = {"long_run": [1, 0, 0], "workout": [0, 1, 0], "other": [0, 0, 1]}
 NUM_POINTS = 60 * 60 * 6
+### Old file, to be deleted soon 
+
+
 MAX_DIST = 1e6
 MAX_SPEED = 15
 

@@ -1,12 +1,14 @@
 
 import numpy as np
+import pandas as pd
 from matplotlib import cm
 import matplotlib.pyplot as plt
+from .track import Track
 
 
 def rotate_points(df, theta, x_col="x", y_col="y"):
     """
-    rotate_points: rotates all points around the origin a random amount
+    rotate_points: rotates all points around the origin by theta
 
     Inputs ~
         df: pd.DataFrame of points to be rotated
@@ -24,6 +26,57 @@ def rotate_points(df, theta, x_col="x", y_col="y"):
     df[x_col] = m[0]
     df[y_col] = m[1]
     return df
+
+def transform_points(points, x, y, theta, x_col="x", y_col="y"):
+    """
+    transform_points: given a set a GPS points, center them around x and y and rotate by theta radians
+
+    Inputs ~
+        points: pd.DataFrame - df of GPS points to be transformed
+        x: float - x ordinate to center around
+        y: float - y ordinate to center around
+        theta: float - angle in radians to rotate by
+        x_col: (optional) string - df column name of x coordinates
+        y_col: (optional) string - df column name of y coordinates
+
+    Outputs ~
+        pd.DataFrame - centered and rotated points
+    """
+    translated_points = (
+        points
+        .assign(x=lambda df: df[x_col] - x)
+        .assign(y=lambda df: df[y_col] - y)
+    )
+
+    return rotate_points(translated_points, theta, x_col, y_col)
+
+
+def add_track_cols(points):
+    """
+    add_track_cols: add 'track_x', 'track_y', and 'dist_to_track' columns to the given df
+    'track_x' and 'track_y' are the respective projected coordinates onto a track
+    'dist_to_track' is the L2 distance between the original and projected point
+
+    Input ~
+        points: pd.DataFrame - df to add the columns to 
+
+    Output ~
+        pd.DataFrame with added columns
+    """
+    track = Track()
+        
+    projected_points = pd.DataFrame(index=range(len(points.x)), columns=["x", "y"])
+    for i in range(len(projected_points)):
+        projected_points.iloc[i] = track.project(points.x[i], points.y[i])
+
+    # TODO: make this more efficient, can calculate projected points in one go
+    new_points = (
+        points
+        .assign(track_x=projected_points.x)
+        .assign(track_y=projected_points.y)
+        .assign(dist_to_track=lambda df: ((df.track_x - df.x) ** 2 + (df.track_y - df.y) ** 2) ** 0.5)
+    )
+    return new_points
 
 
 def plot_map(points, x, y, figsize, ax, MAP_SIZE=2000):

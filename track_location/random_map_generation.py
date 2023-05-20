@@ -1,8 +1,8 @@
 import pandas as pd
 import numpy as np
 from random import randint
-from track import Track
-from tools import rotate_points
+from .track import Track
+from .track_tools import rotate_points
 
 
 SAMPLING_STD_DEV = 4
@@ -126,7 +126,10 @@ def small_loop():
 
 def circular_warm_up():
     """
-    
+    circular_warm_up: replicate a circular warm up
+
+    Outputs ~
+        pd.DataFrame of warm up points
     """
     SCALER = 1.4
     track, _, _ = generate_track(8)
@@ -227,22 +230,12 @@ def generate_400_section():
         track_points.append(track.parametric_point(t))
 
     return pd.DataFrame(track_points, columns=["x", "y"])
-    # # generate 400 section
-    # track1 = "activities/4909301731.fit"  # track with warm up around a bigger field, 5th Jan 2021
-
-    # points, laps = read_activity("data/" + track1)
-
-    # _400_lap = (
-    #     points
-    #     [lambda x: x.Timestamp.between(laps.iloc[2].Timestamp, laps.iloc[3].Timestamp)]
-    #     .assign(x=lambda x: x.x - x.x.mean())
-    #     .assign(y=lambda x: x.y - x.y.mean())
-    # )
-
-    # return _400_lap
 
 
 def generate_200_section():
+    """
+    Unimplemented
+    """
     # track2 = "activities/5431221291.fit"  # track with 200's 
 
     # points, laps = read_activity("data/" + track2)

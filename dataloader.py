@@ -5,7 +5,8 @@ from datetime import timezone
 import fitdecode
 import sweat
 import utm
-from optimisation import track_location, add_track_cols, transform_points
+from track_location.track_tools import add_track_cols, transform_points
+from track_location.optimisation import track_location
 
 
 R = 6371 # Radius of earth in kilometers. Use 3956 for miles. Determines return value units.
@@ -14,11 +15,21 @@ HOME_DIR = "/home/gareth/Documents/Uni/2023/cosc470/"
 
 def haversine(lat1, long1, lat2, long2):
     """
+    haversine: compute the distance between two given GPS coordinates
     Converted to be vectorised from:
     https://stackoverflow.com/questions/4913349/haversine-formula-in-python-bearing-and-distance-between-two-gps-points 
     
     Calculate the great circle distance in kilometers between two points 
     on the earth (specified in decimal degrees)
+
+    Inputs ~
+        lat1:  float - latitude  of first  point
+        long1: float - longitude of first  point
+        lat2:  float - latitude  of second point
+        long2: float - longitude of second point
+
+    Outputs ~
+        distance: float - distance between the two points
     """
     # convert decimal degrees to radians 
     if type(long1) == pd.core.series.Series:
@@ -37,6 +48,15 @@ def haversine(lat1, long1, lat2, long2):
 
 
 def add_track_features(points):
+    """
+    add_track_features: finds the location of a track and adds relevant features to the input df
+
+    Inputs ~
+        points: pd.DataFrame - df of GPS points from a running workout
+
+    Outputs ~
+        (pd.DataFrame, np.array) - df with added features as columns, and array of length 3 with track location and orientation
+    """
     res = track_location(points)
     x, y, theta = res.x
     new_points = transform_points(points, x, y, theta)
@@ -45,6 +65,16 @@ def add_track_features(points):
 
 
 def read_activity(activity):
+    """
+    read_activity: reads the input file and returns dfs with the data from the file
+    Can read .fit, .tcx and .xlsx files
+
+    Inputs ~ 
+        activity: str - file name of the file to read
+
+    Outputs ~
+        (pd.DataFrame, pd.DataFrame, (optional) pd.DataFrame) - df of GPS points, df of laps, df of events
+    """
     if activity[-3:] == "fit":
         return read_fit(activity)
     elif activity[-3:] == "tcx":
@@ -54,6 +84,15 @@ def read_activity(activity):
 
 
 def read_tcx(activity):
+    """
+    read_tcx: read a given tcx file and return GPS points and laps
+
+    Inputs ~
+        activity: str - file path of .tcx file
+
+    Outputs ~
+        (pd.DataFrame, pd.DataFrame) - df of GPS points, and df of laps
+    """
     points = pd.DataFrame(columns=['Timestamp', 'lat', 'long', 'speed', 'cadence'])
     laps = pd.DataFrame(columns=['Timestamp', 'start_pos_lat', 'start_pos_long', 'end_pos_lat',
                                  'end_pos_long', 'total_timer_time', 'total_distance', 'avg_speed'])
@@ -67,6 +106,15 @@ def read_tcx(activity):
 
 
 def read_xlsx(activity):
+    """
+    read_xlsx: read a given xlsx file and return GPS points and laps
+
+    Inputs ~
+        activity: str - file path of .xlsx file
+
+    Outputs ~
+        (pd.DataFrame, pd.DataFrame) - df of GPS points, and df of laps
+    """
     points = pd.read_excel(HOME_DIR + activity, sheet_name="points")
     laps   = pd.read_excel(HOME_DIR + activity, sheet_name="laps")
 
@@ -74,13 +122,29 @@ def read_xlsx(activity):
 
 
 def get_frame_field(frame, field):
-    """Checks if the frame has a specific field, returns None if not"""
+    """
+    get_frame_field: given a frame from a fit file, return the field value if it exists. Else return None
+
+    Inputs ~
+        frame: fit frame - frame read from a fit file
+        field: str - field name to retrieve value from 
+
+    Outputs ~
+        (optional) any - the field value from the frame if it exists
+    """
     if frame.has_field(field):
         return frame.get_value(field)
     return None
 
 
 def to_xy(lats, longs):
+    """
+    to_xy: given a list of latitude and longitudes, convert to x and y coordinates using the UTM scheme
+
+    Inputs ~
+        lats:  list of floats - list of latitudes
+        longs: list of floats - list of longitudes
+    """
     lst = []
     for lat, long in zip(lats, longs):
         lst.append(utm.from_latlon(lat, long)[:2])
@@ -89,9 +153,13 @@ def to_xy(lats, longs):
 
 def read_fit(activity):
     """
-    Input: a string directory of an activity file
-    Reads all the relevant fields for data points and lap times
-    Output: a tuple of datapoints and laps df
+    read_fit: read a given fit file and return GPS points and laps
+
+    Inputs ~
+        activity: str - file path of .fit file
+
+    Outputs ~
+        (pd.DataFrame, pd.DataFrame, pd.DataFrame) - df of GPS points, df of laps, and df of events
     """
     points = pd.DataFrame(columns=['Timestamp', 'lat', 'long', 'speed', 'cadence'])
     laps = pd.DataFrame(columns=['Timestamp', 'start_pos_lat', 'start_pos_long', 'end_pos_lat',
@@ -140,6 +208,7 @@ def read_fit(activity):
                         
                     
                 elif frame.name == 'record':
+                    # every routine GPS point recorded
                     timestamp    = get_frame_field(frame, 'timestamp')
                     lat          = get_frame_field(frame, 'position_lat')
                     long         = get_frame_field(frame, 'position_long')
@@ -166,13 +235,16 @@ def read_fit(activity):
     # https://gis.stackexchange.com/questions/371656/garmin-fit-coordinate-system
     points, track_params = add_track_features(
         points
+        # convert coordinates to float value
         .assign(speed=lambda x: x.speed.astype(float))
         .assign(lat =lambda x: x.lat / (2**32 / 360))
         .assign(long=lambda x: x.long / (2**32 / 360))
 
+        # project onto x y plane with meter units
         .assign(x=lambda x: to_xy(x.lat, x.long).x)
         .assign(y=lambda x: to_xy(x.lat, x.long).y)
 
+        # find the time since the start of the GPS recording for each point
         .assign(Timestamp=lambda df: pd.to_datetime(df.Timestamp).dt.tz_convert(timezone.utc))
         .assign(start_time=lambda df: pd.to_datetime(start_time).tz_convert(timezone.utc))
         .assign(time_after_start=lambda df: (df.Timestamp - df.start_time) / np.timedelta64(1, 's'))

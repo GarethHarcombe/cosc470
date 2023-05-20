@@ -18,6 +18,7 @@ class Circle:
         self.fx = lambda t: self.a + self.r * np.cos(t)
         self.fy = lambda t: self.b + self.r * np.sin(t)
         
+        # derive y/x from above equations
         self.dydx = lambda t: -np.cos(t) / (np.sin(t))
         self.top_half = top_half
 
@@ -43,6 +44,15 @@ class Circle:
 
 class Straight:
     def __init__(self, x, lower_bound, upper_bound, is_back_straight):
+        """
+        Straight: either back or home stretch of a track
+
+        Attributes ~
+            x: float - for a standard track, is either -36.5 (back straight) or 36.5 (home straight)
+            lower_bound: float - southern y value where the straight ends (and goes into a bend)
+            upper_bound: float - northern y value where the straight ends (and goes into a bend)
+            is_back_straight: bool - True if the straight is a back straight. False if home straight
+        """
         self.x = x
         self.lower_bound = lower_bound
         self.upper_bound = upper_bound

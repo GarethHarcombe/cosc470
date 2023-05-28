@@ -9,6 +9,7 @@
   pages      = {4743--4746},
   publisher  = {IEEE},
   abstract   = {This article presents the performance results of a novel algorithm for swimming analysis in real-time within a low-power wrist-worn device. The estimated parameters are: lap count, stroke count, time in lap, total swimming time, pace/speed per lap, total swam distance, and swimming efficiency (SWOLF). In addition, several swimming styles are automatically detected. Results were obtained using a database composed of 13 different swimmers spanning 646 laps and 858.78 min of total swam time. The final precision achieved in lap detection ranges between 99.7\% and 100\%, and the classification of the different swimming styles reached a sensitivity and specificity above 98\%. We demonstrate that a swimmers performance can be fully analyzed with the smart bracelet containing the novel algorithm. The presented algorithm has been licensed to ICON Health \& Fitness Inc. for their line of wearables under the brand iFit.},
+  comment    = {https://ieeexplore.ieee.org/document/7591787},
   date       = {2016-08},
   doi        = {10.1109/EMBC.2016.7591787},
   issn       = {1558-4615},
@@ -403,6 +404,25 @@ https://www.sciencedirect.com/science/article/pii/S0968090X21002771},
   language = {en},
   url      = {https://doi.org/10.1007/s11760-016-0928-z},
   urldate  = {2023-04-14},
+}
+
+'
+@TechReport{Snyder1987,
+  author       = {John P. Snyder},
+  institution  = {U.S Geological Survey},
+  title        = {Map projections: {A} working manual},
+  year         = {1987},
+  address      = {Washington, D.C.},
+  type         = {{USGS} {Numbered} {Series}},
+  abstract     = {After decades of using only one map projection, the Polyconic, for its mapping program, the U.S. Geological Survey (USGS) now uses several of the more common projections for its published maps. For larger scale maps, including topographic quadrangles and the State Base Map Series, conformal projections such as the Transverse Mercator and the Lambert Conformal Conic are used. Equal-area and equidistant projections appear in the National Atlas. Other projections, such as the Miller Cylindrical and the Van der Grinten, are chosen occasionally for convenience, sometimes making use of existing base maps prepared by others. Some projections treat the Earth only as a sphere, others as either ellipsoid or sphere. The USGS has also conceived and designed several new projections, including the Space Oblique Mercator, the first map projection designed to permit mapping of the Earth continuously from a satellite with low distortion. The mapping of extraterrestrial bodies has resulted in the use of standard projections in completely new settings. Several other projections which have not been used by the USGS are frequently of interest to the cartographic public. With increased computerization, it is important to realize that rectangular coordinates for all these projections may be mathematically calculated with formulas which would have seemed too complicated in the past, but which now may be programmed routinely, especially if aided by numerical examples. A discussion of appearance, usage, and history is given together with both forward and inverse equations for each projection involved.},
+  collaborator = {Snyder, John P.},
+  doi          = {10.3133/pp1395},
+  journal      = {Map projections: A working manual},
+  school       = {U.S. Government Printing Office},
+  series       = {Professional {Paper}},
+  shorttitle   = {Map projections},
+  url          = {http://pubs.er.usgs.gov/publication/pp1395},
+  urldate      = {2023-05-26},
 }
 
 @Comment{jabref-meta: databaseType:bibtex;}

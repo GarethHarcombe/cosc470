@@ -5,6 +5,9 @@ from datetime import timezone
 import fitdecode
 import sweat
 import utm
+from torch.utils.data import Dataset, DataLoader
+import torch
+from typing import Any, Callable, Optional
 from track_location.track_tools import add_track_cols, transform_points
 from track_location.optimisation import track_location
 
@@ -272,3 +275,102 @@ def read_fit(activity):
     laps = transform_points(laps, x, y, theta, "end_x", "end_y")
     
     return (points, laps, events)
+
+
+
+class GPSDataset(Dataset):
+    """GPS Dataset"""
+    
+    def __init__(self,
+                 root: str,
+                 csv_dir: str,
+                 fraction: float = 0.2,
+                 subset: str = None) -> None:
+        """
+        Args:
+            root (str): Root directory path.
+            csv_dir (str): CSV with GPS data from Strava
+            fraction (float, optional): A float value from 0 to 1 which specifies the validation split fraction. Defaults to 0.2.
+            subset (str, optional): 'Train' or 'Test' to select the appropriate set. Defaults to None.
+        Raises:
+            OSError: If csv file doesn't exist in root.
+            ValueError: If subset is not either 'Train' or 'Test'
+        """
+        super().__init__()
+
+        self.root = root
+        self.csv_dir = csv_dir
+        self.fraction = fraction
+
+        csv_path = self.root + self.csv_dir
+
+        # if not csv_path.exists():
+        #     raise OSError(f"{csv_path} does not exist.")
+
+        if subset not in ["Train", "Test"]:
+            raise (ValueError(
+                f"{subset} is not a valid input. Acceptable values are Train and Test."
+            ))
+        
+        activities = pd.read_csv(csv_path)
+        self.activities = (
+            activities
+            [(activities.HAS_ACCURATE_LAPS == 1.0)]
+            .reset_index(drop=True)
+            [["Activity ID", "Activity Date", "Activity Name", "IS_TRACK_WORKOUT", 
+              "HAS_ACCURATE_LAPS", "Activity Type", "Activity Description", "Elapsed Time", 
+              "Distance", "Max Heart Rate", "Filename", "Elapsed Time.1", "Moving Time",
+              "Distance.1", "Max Speed", "Average Speed", "Elevation Gain"]]
+        )
+
+        if subset == "Train":
+            self.activities = self.activities[:int(
+                np.ceil(len(self.activities) * (1 - self.fraction)))]
+        else:
+            self.activities = self.activities[
+                int(np.ceil(len(self.activities) * (1 - self.fraction))):]
+              
+    def __len__(self) -> int:
+        return len(self.activities)
+
+    def __getitem__(self, idx: int) -> Any:
+        filename = self.root + self.activities.iloc[idx].Filename[:-3]
+        points, laps, events = read_activity(filename)
+
+        output = {
+            "points_speed": points.speed.values,
+            "points_cadence": points.cadence.values,
+            "points_time": points.time_after_start.values,
+            "points_x": points.x.values,
+            "points_y": points.y.values,
+            "points_dist_to_track": points.dist_to_track.values,
+            "lap_times": laps.time_after_start.values
+        }
+        for key, item in output.items():
+            if item.dtype == object:
+                # Convert the arrays to a compatible data type
+                output[key] = item.astype(float)
+            output[key] = torch.tensor(output[key])
+        return output
+        
+
+        
+def get_dataloaders(root_dir, csv_file, batch_size=1):
+    gps_datasets = {x: GPSDataset(root_dir, csv_file, subset=x) for x in ["Train", "Test"]}  
+
+    dataloaders = {
+        x: DataLoader(gps_datasets[x],
+                      batch_size=batch_size,
+                      shuffle=True,
+                      num_workers=4)
+        for x in ['Train', 'Test']
+    }
+    return dataloaders
+
+
+if __name__ == "__main__":
+    dataloaders = get_dataloaders("data/", "activities.csv")
+    print("Got dataloaders, now retrieving item")
+
+    it = iter(dataloaders["Train"])
+    print(next(it))

@@ -67,7 +67,7 @@ def add_track_features(points):
     return add_track_cols(new_points), res.x
 
 
-def read_activity(activity):
+def read_activity(activity, center_points=True):
     """
     read_activity: reads the input file and returns dfs with the data from the file
     Can read .fit, .tcx and .xlsx files
@@ -79,7 +79,7 @@ def read_activity(activity):
         (pd.DataFrame, pd.DataFrame, (optional) pd.DataFrame) - df of GPS points, df of laps, df of events
     """
     if activity[-3:] == "fit":
-        return read_fit(activity)
+        return read_fit(activity, center_points=center_points)
     elif activity[-3:] == "tcx":
         return read_tcx(activity)
     elif activity[-4:] == "xlsx":
@@ -154,7 +154,7 @@ def to_xy(lats, longs):
     return pd.DataFrame(lst, columns=["x", "y"])
 
 
-def read_fit(activity):
+def read_fit(activity, center_points=True):
     """
     read_fit: read a given fit file and return GPS points and laps
 
@@ -236,7 +236,7 @@ def read_fit(activity):
 
     # why we need to divide by 2**32 / 360:
     # https://gis.stackexchange.com/questions/371656/garmin-fit-coordinate-system
-    points, track_params = add_track_features(
+    points = (
         points
         # convert coordinates to float value
         .assign(speed=lambda x: x.speed.astype(float))
@@ -253,8 +253,7 @@ def read_fit(activity):
         .assign(time_after_start=lambda df: (df.Timestamp - df.start_time) / np.timedelta64(1, 's'))
         .drop(columns=["lat", "long", "start_time"])
     )
-
-    
+        
     laps = (
         laps
         .assign(start_pos_lat =lambda x: x.start_pos_lat  / (2**32 / 360))
@@ -270,9 +269,11 @@ def read_fit(activity):
         .assign(time_after_start=lambda df: df.lap_time.cumsum())
     )    
 
-    x, y, theta = track_params
-    laps = transform_points(laps, x, y, theta, "start_x", "start_y")
-    laps = transform_points(laps, x, y, theta, "end_x", "end_y")
+    if center_points:
+        points, track_params = add_track_features(points)
+        x, y, theta = track_params
+        laps = transform_points(laps, x, y, theta, "start_x", "start_y")
+        laps = transform_points(laps, x, y, theta, "end_x", "end_y")
     
     return (points, laps, events)
 

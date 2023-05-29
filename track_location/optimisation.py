@@ -1,5 +1,5 @@
 from .track_tools import transform_points, add_track_cols
-from scipy.optimize import minimize
+from scipy.optimize import minimize, basinhopping, differential_evolution, shgo, dual_annealing, direct
 import numpy as np
 import pandas as pd
 
@@ -32,6 +32,8 @@ def track_location(points, init=None):
         results of optimisation, use res.x to get parameters
     """
 
+    THETA_SCALE = 50
+
     def track_error(params):
         """
         track_error: get a track location and orientation, calculate the error in the track location
@@ -44,28 +46,30 @@ def track_location(points, init=None):
             error: int
         """
         x, y, theta = params
-        new_points = transform_points(points, x, y, theta)
+        new_points = transform_points(points, x, y, theta / THETA_SCALE)
 
-        error_calcs = add_track_cols(new_points).assign(error=lambda df: (df.dist_to_track < 3))
+        error_calcs = add_track_cols(new_points).assign(error=lambda df: (df.dist_to_track < 5))
 
         return -error_calcs.error.sum()
     
 
     if init is None:
         estimate = estimate_track_location(points)
-        init = np.array([estimate[0], estimate[1], 0])
+        init = np.array([estimate[0], estimate[1], np.pi / 2])
 
     avg_speed = points.speed.mean()
 
     points = (
         points
-        .assign(is_close=lambda df: ((df.x - init[0]) ** 2 + (df.y - init[1]) ** 2) ** 0.5 < 150)
+        .assign(is_close=lambda df: ((df.x - init[0]) ** 2 + (df.y - init[1]) ** 2) ** 0.5 < 100)
     )
 
     # filter by points that are sufficiently close to the initial guess and have a relatively high speed
     # improves performance
     points = points[points.is_close & (points.speed > avg_speed)].reset_index(drop=True)
 
-    res = minimize(track_error, init, method="Nelder-Mead")
-
+    res = direct(track_error, [(points.x.min()+36, points.x.max()-36), 
+                               (points.y.min()+36, points.y.max()-36), 
+                               (0, np.pi * THETA_SCALE)], len_tol=0.001)
+    res.x[2] = res.x[2] / THETA_SCALE
     return res

@@ -2,6 +2,9 @@ import pandas as pd
 import numpy as np
 from track_location.optimisation import track_location
 from dataloader import read_activity, to_xy
+from track_location.keypoint_detection_track import get_model, ClassDataset
+import torchvision
+import torch
 
 
 def angle_between_points(x1, y1, x2, y2):
@@ -28,7 +31,7 @@ def eval_track_location(model, activities, tracks):
     for i, row in activities.iterrows():
         points, laps, events = read_activity("data/" + row.Filename[:-3], center_points=False)
         pred = model(points)
-        print(pred - tracks[row.TRACK])
+        print([pred[i] - tracks[row.TRACK][i] for i in range(len(pred))])
         example_error = sum([((pred[i] - tracks[row.TRACK][i]) ** 2) ** 0.5 for i in range(len(pred))])
         error += example_error
 
@@ -42,32 +45,39 @@ def optimisation_method(points):
     return pred
 
 
-# from track_location.keypoint_detection_track import get_model, ClassDataset
-# import torch
-# model = get_model(num_keypoints=2, weights_path="keypointsrcnn_weights.pth")
-# dataset_train = ClassDataset(length=16)
-# device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
+class CVMethod:
+    def __init__(self):
+        self.device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
+        self.model = get_model(num_keypoints=2, weights_path="track_location/keypointsrcnn_weights.pth", device=self.device)
+        self.dataset_train = ClassDataset(length=16)
+        self.model.to(self.device)
+        self.model.eval()
+        
 
-# def cv_method(points):
-#     images = dataset_train.image_tensor_from_points(points)
-#     images = list(image.to(device) for image in images)
+    def cv_method(self, points):
+        image = self.dataset_train.image_tensor_from_points(points)
+        images = image.to(self.device)[None, :]
 
-#     with torch.no_grad():
-#         model.to(device)
-#         model.eval()
-#         output = model(images)
+        with torch.no_grad():
+            output = self.model(images)
 
-#     scores = output[0]['scores'].detach().cpu().numpy()
+        scores = output[0]['scores'].detach().cpu().numpy()
 
-#     high_scores_idxs = [np.argmax(scores)]
-#     post_nms_idxs = torchvision.ops.nms(output[0]['boxes'][high_scores_idxs], output[0]['scores'][high_scores_idxs], 0.3).cpu().numpy() # Indexes of boxes left after applying NMS (iou_threshold=0.3)
+        high_scores_idxs = [np.argmax(scores)]
+        post_nms_idxs = torchvision.ops.nms(output[0]['boxes'][high_scores_idxs], output[0]['scores'][high_scores_idxs], 0.3).cpu().numpy() # Indexes of boxes left after applying NMS (iou_threshold=0.3)
 
-#     keypoints = []
-#     for kps in output[0]['keypoints'][high_scores_idxs][post_nms_idxs].detach().cpu().numpy():
-#         keypoints.append([list(map(int, kp[:2])) for kp in kps])
-
-    # return (keypoints[0][0][0], keypoints[0][1][0], 
-    #         angle_between_points(keypoints[0][0][0], keypoints[0][1][0], keypoints[0][0][1], keypoints[0][1][1]))
+        keypoints = []
+        for kps in output[0]['keypoints'][high_scores_idxs][post_nms_idxs].detach().cpu().numpy():
+            keypoints.append([list(kp[:2]) for kp in kps])
+        print(keypoints)
+        x1 = self.dataset_train.image_coords_to_x_point(keypoints[0][0][0], points.x.mean())
+        y1 = self.dataset_train.image_coords_to_y_point(keypoints[0][0][1], points.y.mean())
+        x2 = self.dataset_train.image_coords_to_x_point(keypoints[0][1][0], points.x.mean())
+        y2 = self.dataset_train.image_coords_to_y_point(keypoints[0][1][1], points.y.mean())
+        print(x1, y1, x2, y2)
+        result = [x1, y1, angle_between_points(x1, y1, x2, y2)]
+        print(result)
+        return result
 
 
 def main():
@@ -75,13 +85,16 @@ def main():
     tracks = get_known_tracks(track_csv_path)
     print(tracks)
 
+    # model = optimisation_method
+    model = CVMethod().cv_method
+
     activities = (
         pd.read_csv("data/activities.csv")
         [lambda df: ~pd.isna(df.TRACK)]
         [lambda df: df.TRACK.str.contains('|'.join(tracks.keys()))]
     )
     
-    print(eval_track_location(optimisation_method, activities, tracks))
+    print(eval_track_location(model, activities, tracks))
 
 
 if __name__ == "__main__":

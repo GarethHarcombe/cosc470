@@ -9,11 +9,10 @@ import torchvision
 from torchvision.models.detection.rpn import AnchorGenerator
 
 # https://github.com/pytorch/vision/tree/main/references/detection
-from utils import collate_fn
-from engine import train_one_epoch, evaluate
+from .utils import collate_fn
 
-from random_map_generation import random_map
-from tools import consistent_scale_plot
+from .random_map_generation import random_map
+from .track_tools import consistent_scale_plot
 
 
 MAP_SIZE = 2000
@@ -73,12 +72,22 @@ class ClassDataset(Dataset):
         """Convert x coordinate from GPS points into pixel coordinates in the image"""
         CANVAS_WIDTH  = self.IMG_WIDTH  - self.MARGINS["LEFT"] - self.MARGINS["RIGHT"]
         return self.MARGINS["LEFT"] + CANVAS_WIDTH // 2 + (x - points_mean) * (CANVAS_WIDTH   // 2) / MAP_SIZE
+    
+    def image_coords_to_x_point(self, x, points_mean):
+        """Convert image x coordinate from pixel coordinates into GPS points in the image"""
+        CANVAS_WIDTH  = self.IMG_WIDTH  - self.MARGINS["LEFT"] - self.MARGINS["RIGHT"]
+        return ((x - self.MARGINS["LEFT"] - CANVAS_WIDTH // 2) * MAP_SIZE) / (CANVAS_WIDTH // 2) + points_mean
 
 
     def y_point_to_image_coords(self, y, points_mean):
         """Convert y coordinate from GPS points into pixel coordinates in the image"""
         CANVAS_HEIGHT = self.IMG_HEIGHT - self.MARGINS["TOP"]  - self.MARGINS["BOTTOM"]
         return self.MARGINS["TOP"] + CANVAS_HEIGHT // 2 + (-y + points_mean) * (CANVAS_HEIGHT // 2) / MAP_SIZE
+    
+    def image_coords_to_y_point(self, y, points_mean):
+        """Convert image y coordinate from pixel coordinates into GPS points in the image"""
+        CANVAS_HEIGHT = self.IMG_HEIGHT - self.MARGINS["TOP"]  - self.MARGINS["BOTTOM"]
+        return -((y - self.MARGINS["TOP"] - CANVAS_HEIGHT // 2) * MAP_SIZE) / (CANVAS_HEIGHT // 2) + points_mean
 
 
     def __getitem__(self, idx):
@@ -147,7 +156,7 @@ def visualize(image, bboxes, keypoints):
 
 
 
-def get_model(num_keypoints, weights_path=None):
+def get_model(num_keypoints, weights_path=None, device=None):
     # Download model 
     anchor_generator = AnchorGenerator(sizes=(32, 64, 128, 256, 512), aspect_ratios=(0.25, 0.5, 0.75, 1.0, 2.0, 3.0, 4.0))
     model = torchvision.models.detection.keypointrcnn_resnet50_fpn(pretrained=False,
@@ -157,7 +166,7 @@ def get_model(num_keypoints, weights_path=None):
                                                                    rpn_anchor_generator=anchor_generator)
 
     if weights_path:
-        state_dict = torch.load(weights_path)
+        state_dict = torch.load(weights_path, map_location=device)
         model.load_state_dict(state_dict)        
         
     return model

@@ -425,4 +425,40 @@ https://www.sciencedirect.com/science/article/pii/S0968090X21002771},
   urldate      = {2023-05-26},
 }
 
+'
+@Article{Wu2018,
+  author   = {Wu, Shaoen and Xu, Junhong and Zhu, Shangyue and Guo, Hanqing},
+  journal  = {Signal Processing},
+  title    = {A {Deep} {Residual} convolutional neural network for facial keypoint detection with missing labels},
+  year     = {2018},
+  issn     = {0165-1684},
+  month    = mar,
+  pages    = {384--391},
+  volume   = {144},
+  abstract = {Keypoint detection is critical in image recognitions. Deep learning such as convolutional neural network (CNN) has recently demonstrated its tremendous success in detecting image keypoints over conventional image processing methodologies. The deep learning solutions, however, heavily rely on labeling target images for their reliability and accuracy. Unfortunately, most image datasets do not have all labels marked. To address this problem, this paper presents an effective and novel deep learning solution, Masked Loss Residual Convolutional Neural Network (ML-ResNet), to facial keypoint detection on the datasets that have missing target labels. The core of ML-ResNet is a masked loss objective function that ignores the error in predicting the missing target keypoints in the output layer of a CNN. To compensate for the loss induced by the masked loss objective function that likely results in overfitting, ML-ResNet is designed of a data augmentation strategy to increase the number of training data. The performance of ML-ResNet has been evaluated on the image dataset from Kaggle Facial Keypoints Detection competition, which consists of 7049 training images, but with only 2140 images that have full target keypoints labeled. In the experiments, ML-ResNet is compared to a pioneer literature CNN facial keypoint detection work. The experiment results clearly show that the proposed ML-ResNet is robust and advantageous in training CNNs on datasets with missing target values. ML-ResNet can improve the learning time by 30\% during the training and the detection accuracy by eight times in facial keypoint detection.},
+  doi      = {10.1016/j.sigpro.2017.11.003},
+  file     = {ScienceDirect Full Text PDF:https\://www.sciencedirect.com/science/article/pii/S0165168417303924/pdfft?md5=9dca069542f86ff3914107b74ecfe858&pid=1-s2.0-S0165168417303924-main.pdf&isDTMRedir=Y:application/pdf},
+  keywords = {Deep learning, Facial keypoint detection},
+  language = {en},
+  url      = {https://www.sciencedirect.com/science/article/pii/S0165168417303924},
+  urldate  = {2023-04-25},
+}
+
+@Article{Dumas2022,
+  author        = {Dumas, Joe},
+  journal       = {International Journal of Computer Science and Information Technology, Volume 14, Number 1, February 2022},
+  title         = {Accuracy of Garmin GPS Running Watches over Repetitive Trials on the Same Route},
+  year          = {2022},
+  month         = mar,
+  abstract      = {Many runners use watches incorporating Global Positioning System technology to track their workouts. These devices can be valuable training aids, but they have limitations. For several reasons including variations in satellite position, environmental factors, and design decisions made by the manufacturer, GPS-enabled watches can produce position measurement errors. These can result in incorrect estimations of total distance covered as well as running pace. This study examined the accuracy of three Garmin running watches of different technological generations using repetitive trials, over several years, by the same runner over the same route. The older watches, a Forerunner 205 and a Forerunner 220, showed similar accuracy when traversing the route. The newer generation watch, a Forerunner 45S, was found to be significantly less accurate in terms of both the trueness and precision of its distance measurements. This may indicate that Garmin, in competition with other manufacturers of similar devices, has chosen in recent years to prioritize device miniaturization and battery life over accuracy.},
+  archiveprefix = {arXiv},
+  copyright     = {Creative Commons Attribution Non Commercial No Derivatives 4.0 International},
+  doi           = {10.48550/ARXIV.2203.00491},
+  eprint        = {2203.00491},
+  file          = {:http\://arxiv.org/pdf/2203.00491v1:PDF},
+  keywords      = {Other Computer Science (cs.OH), FOS: Computer and information sciences},
+  primaryclass  = {cs.OH},
+  publisher     = {arXiv},
+}
+
 @Comment{jabref-meta: databaseType:bibtex;}

@@ -4,6 +4,8 @@ import numpy as np
 import pandas as pd
 
 
+MARGIN = 15
+
 def estimate_track_location(points):
     """
     estimate_track_location: returns an estimated track location
@@ -68,8 +70,8 @@ def track_location(points, init=None):
     # improves performance
     points = points[points.is_close & (points.speed > avg_speed)].reset_index(drop=True)
 
-    res = direct(track_error, [(points.x.min()+20, points.x.max()-20), 
-                               (points.y.min()+20, points.y.max()-20), 
+    res = direct(track_error, [(points.x.min()+MARGIN, points.x.max()-MARGIN), 
+                               (points.y.min()+MARGIN, points.y.max()-MARGIN), 
                                (0, np.pi * THETA_SCALE)], len_tol=0.001)
     res.x[2] = res.x[2] / THETA_SCALE
     return res

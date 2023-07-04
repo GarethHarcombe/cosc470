@@ -49,7 +49,7 @@ class ClassDataset(Dataset):
         self.MARGINS = get_margins(img, self.IMG_HEIGHT, self.IMG_WIDTH)
 
 
-    def image_tensor_from_points(self, points):
+    def image_tensor_from_points(self, points, format="tensor"):
         """Generate a tensor from a set of GPS points.
         Generates image, then converts image into a tensor for input into the model"""
         fig = consistent_scale_plot(points, MAP_SIZE=MAP_SIZE)
@@ -59,8 +59,11 @@ class ClassDataset(Dataset):
         self.IMG_HEIGHT = int(np.sqrt(len(np_fig) / 3))
         self.IMG_WIDTH = self.IMG_HEIGHT
 
-        img = torch.Tensor([np_fig[0::3], np_fig[1::3], np_fig[2::3]])   # needs to be in C, H, W format. Image is 1000x1000. Colour RGB
-        img = torch.reshape(img, (3, self.IMG_HEIGHT, self.IMG_WIDTH)) / 255
+        if format == "tensor":
+            img = torch.Tensor([np_fig[0::3], np_fig[1::3], np_fig[2::3]])   # needs to be in C, H, W format. Image is 1000x1000. Colour RGB
+            img = torch.reshape(img, (3, self.IMG_HEIGHT, self.IMG_WIDTH)) / 255
+        elif format == "numpy":
+            img = np_fig.reshape((1000, 1000, 3))
 
         plt.clf()
         plt.close()

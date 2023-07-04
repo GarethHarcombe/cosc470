@@ -5,6 +5,7 @@ from dataloader import read_activity, to_xy
 from track_location.keypoint_detection_track import get_model, ClassDataset
 import torchvision
 import torch
+import track_location.convolution as convolution
 
 
 def angle_between_points(x1, y1, x2, y2):
@@ -24,28 +25,34 @@ def get_known_tracks(csv_path):
 
     return tracks
 
+def angle_diff(angle1, angle2):
+    return abs((angle1 - angle2 + np.pi/2) % (np.pi) - np.pi/2)
+
 
 def eval_track_location(model, activities, tracks):
-    error = 0
+    errors = []
 
-    for i, row in activities.iterrows():
-        points, laps, events = read_activity("data/" + row.Filename[:-3], center_points=False)
+    for _, row in activities.iterrows():
+        points, _, _ = read_activity("data/" + row.Filename[:-3], center_points=False)
         pred = model(points)
-        print([pred[i] - tracks[row.TRACK][i] for i in range(len(pred))])
-        example_error = sum([((pred[i] - tracks[row.TRACK][i]) ** 2) ** 0.5 for i in range(len(pred))])
-        error += example_error
+        error = (((pred[0] - tracks[row.TRACK][0])**2 + 
+                  (pred[1] - tracks[row.TRACK][1])**2)**0.5,
+                 angle_diff(pred[2], tracks[row.TRACK][2]))
+        errors.append(error)
+        print(error)
 
-    return error / len(activities)
+    return (sum(error[0] for error in errors) / len(errors),
+            sum(error[1] for error in errors) / len(errors))
 
 
 def optimisation_method(points):
-    # error of 31.275
+    # error: 
     pred = track_location(points).x
     pred[2] = pred[2]
     return pred
 
 
-class CVMethod:
+class KeypointMethod:
     def __init__(self):
         self.device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
         self.model = get_model(num_keypoints=2, weights_path="track_location/keypointsrcnn_weights.pth", device=self.device)
@@ -80,13 +87,31 @@ class CVMethod:
         return result
 
 
+
+class ConvolutionMethod:
+    # error: (4.200736483630741, 0.08025518187695763)
+    def __init__(self):
+        self.dataset_train = ClassDataset(length=16)
+        
+
+    def cv_method(self, points):
+        image = self.dataset_train.image_tensor_from_points(points, format="numpy")
+        track_location = convolution.predict_track_location(image)
+        
+        x1 = self.dataset_train.image_coords_to_x_point(track_location[0], points.x.mean())
+        y1 = self.dataset_train.image_coords_to_y_point(track_location[1], points.y.mean())
+        result = [x1, y1, track_location[2]]
+        return result
+
+
 def main():
     track_csv_path = "data/known_track_locations.csv"
     tracks = get_known_tracks(track_csv_path)
     print(tracks)
 
-    # model = optimisation_method
-    model = CVMethod().cv_method
+    model = optimisation_method
+    # model = KeypointMethod().cv_method
+    # model = ConvolutionMethod().cv_method
 
     activities = (
         pd.read_csv("data/activities.csv")
@@ -94,7 +119,8 @@ def main():
         [lambda df: df.TRACK.str.contains('|'.join(tracks.keys()))]
     )
     
-    print(eval_track_location(model, activities, tracks))
+
+    print(f"Final results: {eval_track_location(model, activities, tracks)}")
 
 
 if __name__ == "__main__":

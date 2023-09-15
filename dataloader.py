@@ -10,6 +10,8 @@ import torch
 from typing import Any, Callable, Optional
 from track_location.track_tools import add_track_cols, transform_points
 from track_location.optimisation import track_location
+from track_location.keypoint_detection_track import ClassDataset
+import track_location.convolution as convolution
 
 
 R = 6371 # Radius of earth in kilometers. Use 3956 for miles. Determines return value units.
@@ -50,6 +52,21 @@ def haversine(lat1, long1, lat2, long2):
     return c * R
 
 
+class ConvolutionMethod:
+    # error: (4.200736483630741, 0.08025518187695763)
+    def __init__(self):
+        self.dataset_train = ClassDataset(length=16)
+
+    def cv_method(self, points):
+        image = self.dataset_train.image_tensor_from_points(points, format="numpy")
+        track_location = convolution.predict_track_location(image)
+        
+        x1 = self.dataset_train.image_coords_to_x_point(track_location[0], points.x.mean())
+        y1 = self.dataset_train.image_coords_to_y_point(track_location[1], points.y.mean())
+        result = [x1, y1, track_location[2]]
+        return result
+
+
 def add_track_features(points):
     """
     add_track_features: finds the location of a track and adds relevant features to the input df
@@ -60,11 +77,18 @@ def add_track_features(points):
     Outputs ~
         (pd.DataFrame, np.array) - df with added features as columns, and array of length 3 with track location and orientation
     """
-    res = track_location(points)
-    x, y, theta = res.x
+    # res = track_location(points)
+    # x, y, theta = res.x
+    # new_points = transform_points(points, x, y, theta)
+
+    # return add_track_cols(new_points), res
+
+    res = ConvolutionMethod().cv_method(points)
+    x, y, theta = res
+    
     new_points = transform_points(points, x, y, theta)
 
-    return add_track_cols(new_points), res.x
+    return add_track_cols(new_points), res
 
 
 def read_activity(activity, center_points=True):
@@ -230,7 +254,7 @@ def read_fit(activity, center_points=True):
                         points = pd.concat([points, entry], axis=0, ignore_index=True)
 
     try:
-        start_time = events[events.event_type == "start"].Timestamp.values[0]
+        start_time = pd.Timestamp(events[events.event_type == "start"].Timestamp.values[0]).tz_localize(timezone.utc)
     except IndexError:
         start_time = points.Timestamp.values[0].tz_localize(timezone.utc)
 

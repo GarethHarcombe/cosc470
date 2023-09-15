@@ -109,9 +109,9 @@ def main():
     tracks = get_known_tracks(track_csv_path)
     print(tracks)
 
-    model = optimisation_method
+    # model = optimisation_method
     # model = KeypointMethod().cv_method
-    # model = ConvolutionMethod().cv_method
+    model = ConvolutionMethod().cv_method
 
     activities = (
         pd.read_csv("data/activities.csv")

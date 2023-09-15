@@ -95,7 +95,7 @@ class Track:
                                     = 2 * (pi) + 2 * (84.39 * pi / 114.67)
                                     = around 10.907... radians
         """
-        straight_length = self.s * np.pi / (np.pi * self.r)
+        straight_length = self.s * np.pi / (np.pi * self.r)    #  np.pi * np.pi * self.r / self.s 
         total_t = 2 * np.pi + 2 * straight_length
         t -= total_t * (t // total_t)   # normalise
 

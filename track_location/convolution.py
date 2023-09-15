@@ -72,6 +72,7 @@ def predict_track_location(image):
 
 if __name__ == "__main__":
     image = cv2.imread('/home/gareth/Documents/Uni/2023/cosc470/track_location/random_image.png')
+    cv2.imshow("Real Original", image)
     print(image.shape)
     location = predict_track_location(image)
     print(f"Average location is {location}")

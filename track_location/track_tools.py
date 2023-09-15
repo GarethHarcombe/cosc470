@@ -42,11 +42,17 @@ def transform_points(points, x, y, theta, x_col="x", y_col="y"):
     Outputs ~
         pd.DataFrame - centered and rotated points
     """
-    translated_points = (
-        points
-        .assign(x=lambda df: df[x_col] - x)
-        .assign(y=lambda df: df[y_col] - y)
-    )
+
+    kwargs = {x_col : lambda df: df[x_col] - x, 
+              y_col : lambda df: df[y_col] - y}
+
+    # translated_points = (
+    #     points
+    #     .assign(x=lambda df: df[x_col] - x)
+    #     .assign(y=lambda df: df[y_col] - y)
+    # )
+    translated_points = points.assign(**kwargs)
+
 
     return rotate_points(translated_points, theta, x_col, y_col)
 

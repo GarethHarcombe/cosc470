@@ -66,6 +66,7 @@ class ConvolutionMethod:
         result = [x1, y1, track_location[2]]
         return result
 
+ConvolutionClass = ConvolutionMethod()
 
 def add_track_features(points):
     """
@@ -83,7 +84,7 @@ def add_track_features(points):
 
     # return add_track_cols(new_points), res
 
-    res = ConvolutionMethod().cv_method(points)
+    res = ConvolutionClass.cv_method(points)
     x, y, theta = res
     
     new_points = transform_points(points, x, y, theta)
@@ -275,6 +276,9 @@ def read_fit(activity, center_points=True):
         .assign(Timestamp=lambda df: pd.to_datetime(df.Timestamp).dt.tz_convert(timezone.utc))
         .assign(start_time=lambda df: pd.to_datetime(start_time).tz_convert(timezone.utc))
         .assign(time_after_start=lambda df: (df.Timestamp - df.start_time) / np.timedelta64(1, 's'))
+        .assign(acceleration=lambda df: (df.speed.diff() / df.Timestamp.diff().dt.total_seconds()).abs())
+        .dropna()
+        .reset_index(drop=True)
         .drop(columns=["lat", "long", "start_time"])
     )
         

@@ -1,7 +1,7 @@
 import numpy as np
 
 # Penalty for missing a lap time, error unit in seconds
-PENALTY = 20
+PENALTY = 100
 
 def evaluate(test_labels, predictions):
     """

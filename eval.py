@@ -1,7 +1,7 @@
 import numpy as np
 
 # Penalty for missing a lap time, error unit in seconds
-PENALTY = 100
+PENALTY = 500
 
 def evaluate(test_labels, predictions):
     """
@@ -34,16 +34,64 @@ def evaluate(test_labels, predictions):
     return error / len(test_labels)
 
 
+def calculate_errors(numbers, target_numbers):
+    """
+    Calculate the error between each item in a list of floats and their
+    closest corresponding numbers in another list.
+
+    Args:
+    numbers (list of float): List of floats for which to calculate errors.
+    target_numbers (list of float): List of target numbers for comparison.
+
+    Returns:
+    list of float: List of errors, where each error corresponds to the
+                   difference between a number in the 'numbers' list and its
+                   closest target number.
+    """
+    if len(numbers) == 0:
+        return 0
+
+    errors = []
+
+    for number in numbers:
+        closest_target = min(target_numbers, key=lambda x: abs(x - number), default=0)
+        error = abs(number - closest_target)
+        errors.append(error)
+
+    return sum(errors) / len(errors)
+
+
+def evaluate(test_labels, predictions):
+    # precision metric - measure the quality of predictions, how close they are to ground truths
+    precision = calculate_errors(test_labels, predictions)
+
+    # recall metric    - measure the quantity of predictions, how well all the predicted times match the ground truths
+    recall = calculate_errors(predictions, test_labels)
+
+    return precision, recall
+
+
 if __name__ == "__main__":
-    # test cases:
-    # should return 0
+    ##### OLD TESTS
+    # # test cases:
+    # # should return 0
+    # print(evaluate([1, 2, 3], [1, 2, 3]))
+
+    # # should return (0.1 + 0.1 + 0.3 + PENALTY * 1) / 3
+    # print(evaluate([1, 2, 3], [1.1, 1.9, 2.3]))
+
+    # # should return (0.5 + 0.5) / 3
+    # print(evaluate([1, 2, 3], [1, 1.5, 2, 2.5, 3]))
+
+    # # should return (0.1 + 0.4 + 0.1) / 3
+    # print(evaluate([1, 2, 3], [0.9, 1.6, 2.9]))
+    
     print(evaluate([1, 2, 3], [1, 2, 3]))
 
-    # should return (0.1 + 0.1 + 0.3 + PENALTY * 1) / 3
     print(evaluate([1, 2, 3], [1.1, 1.9, 2.3]))
 
-    # should return (0.5 + 0.5) / 3
     print(evaluate([1, 2, 3], [1, 1.5, 2, 2.5, 3]))
 
-    # should return (0.1 + 0.4 + 0.1) / 3
     print(evaluate([1, 2, 3], [0.9, 1.6, 2.9]))
+
+    print(evaluate([1, 2, 3], []))

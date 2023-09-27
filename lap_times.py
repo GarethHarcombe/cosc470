@@ -22,8 +22,8 @@ if __name__ == "__main__":
     # train_activities = train_activities[:1]
     # test_activities = test_activities[:1]
 
-    # model = SlidingWindow()
-    model = Acceleration()
+    model = SlidingWindow()
+    # model = Acceleration()
 
     if model.requires_training:
         model.train(train_activities)
@@ -31,7 +31,8 @@ if __name__ == "__main__":
     errors = model.test(test_activities)
 
     print(errors)
-    print("Average error: ", sum(errors) / len(errors))
+    print("Average 'precision': ", sum(errors[0]) / len(errors[0]))
+    print("Average 'recall':    ", sum(errors[1]) / len(errors[1]))
     print("done")
 
 

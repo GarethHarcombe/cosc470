@@ -64,7 +64,9 @@ class Acceleration(Model):
             laps = pd.read_pickle("data/"   + file[:-3] + "laps"   + file[-4:])
             events = pd.read_pickle("data/" + file[:-3] + "events" + file[-4:])
 
-            predictions = grouping_1d(points[points.acceleration > self.ACCELERATION_THRES].time_after_start.reset_index(drop=True) - 6)
+            # points = points[points.dist_to_track < 100]
+
+            predictions = grouping_1d(points[points.acceleration > self.ACCELERATION_THRES].time_after_start.reset_index(drop=True) - 6, grouping_method="first")
 
             print("Predicted: ", predictions)
             print("Actual: ", laps.time_after_start.values)
@@ -82,7 +84,8 @@ class SlidingWindow(Model):
 
     def __init__(self, params=None, requires_training=True, epochs=10):
         super().__init__(params, requires_training, epochs)
-        self.clf = svm.SVC(kernel='linear')
+        self.CLASS_WEIGHT = 250
+        self.clf = svm.SVC(kernel='rbf', class_weight={0: 1.0, 1: self.CLASS_WEIGHT / 6}) # positive class is weighted higher
         
     def generate_slices(self, points, laps, events):
         """df with 6 rows, third row is at t
@@ -131,6 +134,9 @@ class SlidingWindow(Model):
             points = pd.read_pickle("data/" + file[:-3] + "points" + file[-4:])
             laps = pd.read_pickle("data/"   + file[:-3] + "laps"   + file[-4:])
             events = pd.read_pickle("data/" + file[:-3] + "events" + file[-4:])
+
+            points = points[points.dist_to_track < 100]
+
             new_data, new_labels, times = self.generate_slices(points, laps, events)
             data.append(new_data)
             labels.append(new_labels)
@@ -170,7 +176,7 @@ class SlidingWindow(Model):
         neg_indices = [i for i, label in enumerate(flattened_labels) if label == 0]
         pos_indices = [i for i, label in enumerate(flattened_labels) if label == 1]
 
-        sampled_indices = random.sample(neg_indices, pos_trains * 3)
+        sampled_indices = random.sample(neg_indices, int(pos_trains * self.CLASS_WEIGHT))
         new_indices = set(pos_indices) | set(sampled_indices)
 
         condensed_data = []

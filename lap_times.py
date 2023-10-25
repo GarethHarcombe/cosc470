@@ -53,11 +53,12 @@ def main(DIVISOR=4):
     # train_activities = train_activities[:1]
     # test_activities = test_activities[:1]
 
-    # model = SlidingWindow(DIVISOR=DIVISOR, FULL_PIPELINE=FULL_PIPELINE)
-    model = Acceleration(FULL_PIPELINE=FULL_PIPELINE)
+    model = SlidingWindow(DIVISOR=DIVISOR, FULL_PIPELINE=FULL_PIPELINE)
+    # model = Acceleration(FULL_PIPELINE=FULL_PIPELINE)
 
     if model.requires_training:
         model.train(train_activities)
+        model.save("sliding_window_model.pkl")
 
     errors = model.test(test_activities)
 

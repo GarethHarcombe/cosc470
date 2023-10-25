@@ -31,7 +31,7 @@ def angle_diff(angle1, angle2):
 
 def eval_track_location(model, activities, tracks):
     errors = []
-
+    print(len(activities))
     for _, row in activities.iterrows():
         points, _, _ = read_activity("data/" + row.Filename[:-3], center_points=False)
         pred = model(points)

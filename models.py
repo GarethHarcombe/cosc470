@@ -6,6 +6,7 @@ from eval import evaluate
 from eval import iou as evaluate
 from dataloader import read_activity
 from eval_track import get_known_tracks
+import pickle
 
 
 TIME_THRESHOLD = 12
@@ -55,7 +56,15 @@ class Acceleration(Model):
         self.FULL_PIPELINE = FULL_PIPELINE
         track_csv_path = "data/known_track_locations.csv"
         self.tracks = get_known_tracks(track_csv_path)
-        
+
+    def predict(self, points, events=None, laps=None):
+        points = points[points.dist_to_track < 100]
+
+        predictions = grouping_1d(points[points.acceleration > self.ACCELERATION_THRES].time_after_start.reset_index(drop=True) - 6, grouping_method="first")
+
+        return predictions
+
+    
     def test(self, activities):
         """Simple predictor that makes predictions off the acceleration of the athlete"""
 
@@ -73,10 +82,8 @@ class Acceleration(Model):
             laps = pd.read_pickle("data/"   + row.New_Filename[:-3] + "laps"   + row.New_Filename[-4:])
             events = pd.read_pickle("data/" + row.New_Filename[:-3] + "events" + row.New_Filename[-4:])
 
-            points = points[points.dist_to_track < 100]
-
-            predictions = grouping_1d(points[points.acceleration > self.ACCELERATION_THRES].time_after_start.reset_index(drop=True) - 6, grouping_method="first")
-
+            predictions = self.predict(points)
+            
             print("Predicted: ", predictions)
             print("Actual: ", laps.time_after_start.values)
             errors.append(evaluate(laps.time_after_start.values, predictions))
@@ -91,7 +98,7 @@ class Acceleration(Model):
 
 class SlidingWindow(Model):
 
-    def __init__(self, params=None, requires_training=True, epochs=10, DIVISOR=100, FULL_PIPELINE=True):
+    def __init__(self, params=None, requires_training=True, epochs=10, DIVISOR=4, FULL_PIPELINE=True):
         super().__init__(params, requires_training, epochs)
         self.CLASS_WEIGHT = 230   # 250
         self.clf = svm.SVC(kernel='rbf', class_weight={0: 1.0, 1: self.CLASS_WEIGHT / DIVISOR}) # positive class is weighted higher
@@ -100,8 +107,17 @@ class SlidingWindow(Model):
             self.CLASS_WEIGHT = min([230, self.CLASS_WEIGHT])
         track_csv_path = "data/known_track_locations.csv"
         self.tracks = get_known_tracks(track_csv_path)
+
+    def save(self, filename):
+        with open(filename,'wb') as f:
+            pickle.dump(self.clf, f)
+
+
+    def load(self, filename):
+        with open(filename, 'rb') as f:
+            self.clf = pickle.load(f)
         
-    def generate_slices(self, points, laps, events):
+    def generate_slices(self, points, events, laps=None):
         """df with 6 rows, third row is at t
         1 if there is a lap time in interval [t, t+1)
         0 if not"""
@@ -116,7 +132,9 @@ class SlidingWindow(Model):
         times = []
 
         for t in range(start_time, end_time, time_slice_duration):
-            label = 1 if len(laps[(t <= laps.time_after_start) & (laps.time_after_start < t+1)]) > 0 else 0
+            if laps is not None:
+                label = 1 if len(laps[(t <= laps.time_after_start) & (laps.time_after_start < t+1)]) > 0 else 0
+                labels.append(label)
 
             query_time = pd.Timestamp(events.iloc[0].Timestamp + dt.timedelta(seconds=t))
             closest_index = points.set_index('Timestamp').index.get_indexer([query_time], method='nearest')[0]
@@ -128,7 +146,6 @@ class SlidingWindow(Model):
             subset = subset.drop(columns=["time_after_start"])
 
             data.append(subset.values.ravel())
-            labels.append(label)
             times.append(t)
 
         return data, labels, times
@@ -155,13 +172,25 @@ class SlidingWindow(Model):
 
             points = points[points.dist_to_track < 100]
 
-            new_data, new_labels, times = self.generate_slices(points, laps, events)
+            new_data, new_labels, times = self.generate_slices(points, events, laps)
             data.append(new_data)
             labels.append(new_labels)
             window_times.append(times)
             all_laps.append(laps)
 
         return data, labels, window_times, all_laps
+
+    def predict(self, points, events, laps=None):
+        data, _, window_times = self.generate_slices(points, events, laps)
+
+        test_labels_preds = self.clf.predict(data)
+        workout_output = []
+
+        for i, label in enumerate(test_labels_preds):
+            if label == 1:
+                workout_output.append(window_times[i])
+
+        return grouping_1d(pd.Series(workout_output))
 
     def generate_predictions(self, test_data, test_window_times):
         output = []

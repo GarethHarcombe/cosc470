@@ -170,8 +170,8 @@ def iou(test_labels, predictions):
     intersection = intersection_of_intervals(intervals1, intervals2)
     union = merge_intervals(union_of_intervals(intervals1, intervals2))
 
-    print("Intersection:", intersection)
-    print("Union:", union)
+    # print("Intersection:", intersection)
+    # print("Union:", union)
 
     intersection_area = sum([inter[1] - inter[0] for inter in intersection])
     union_area = sum([un[1] - un[0] for un in union])

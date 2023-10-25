@@ -68,12 +68,13 @@ class ConvolutionMethod:
 
 ConvolutionClass = ConvolutionMethod()
 
-def add_track_features(points):
+def add_track_features(points, center_ground_truth=False, track=None):
     """
     add_track_features: finds the location of a track and adds relevant features to the input df
 
     Inputs ~
         points: pd.DataFrame - df of GPS points from a running workout
+        center_ground_truth: bool - if true, center around the ground truth track location rather than predicted
 
     Outputs ~
         (pd.DataFrame, np.array) - df with added features as columns, and array of length 3 with track location and orientation
@@ -83,8 +84,10 @@ def add_track_features(points):
     # new_points = transform_points(points, x, y, theta)
 
     # return add_track_cols(new_points), res
-
-    res = ConvolutionClass.cv_method(points)
+    if center_ground_truth:
+        res = track
+    else:
+        res = ConvolutionClass.cv_method(points)
     x, y, theta = res
     
     new_points = transform_points(points, x, y, theta)
@@ -92,7 +95,7 @@ def add_track_features(points):
     return add_track_cols(new_points), res
 
 
-def read_activity(activity, center_points=True):
+def read_activity(activity, center_points=True, track=None):
     """
     read_activity: reads the input file and returns dfs with the data from the file
     Can read .fit, .tcx and .xlsx files
@@ -104,7 +107,7 @@ def read_activity(activity, center_points=True):
         (pd.DataFrame, pd.DataFrame, (optional) pd.DataFrame) - df of GPS points, df of laps, df of events
     """
     if activity[-3:] == "fit":
-        return read_fit(activity, center_points=center_points)
+        return read_fit(activity, center_points=center_points, track=track)
     elif activity[-3:] == "tcx":
         return read_tcx(activity)
     elif activity[-4:] == "xlsx":
@@ -179,12 +182,13 @@ def to_xy(lats, longs):
     return pd.DataFrame(lst, columns=["x", "y"])
 
 
-def read_fit(activity, center_points=True):
+def read_fit(activity, center_points=True, track=None):
     """
     read_fit: read a given fit file and return GPS points and laps
 
     Inputs ~
         activity: str - file path of .fit file
+        center_points: bool - whether to center the points around the center of the track
 
     Outputs ~
         (pd.DataFrame, pd.DataFrame, pd.DataFrame) - df of GPS points, df of laps, and df of events
@@ -298,7 +302,7 @@ def read_fit(activity, center_points=True):
     )    
 
     if center_points:
-        points, track_params = add_track_features(points)
+        points, track_params = add_track_features(points, track=track)
         x, y, theta = track_params
         laps = transform_points(laps, x, y, theta, "start_x", "start_y")
         laps = transform_points(laps, x, y, theta, "end_x", "end_y")

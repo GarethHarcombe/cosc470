@@ -267,7 +267,7 @@ def generate_track(UPPER_LIMIT=16):
 
     _200_lap = generate_200_section()
 
-    if np.random.random() < 0.0:  # generate 200m workout
+    if np.random.random() < 0.0:  # generate 200m workout; this is never done
         section = _200_lap
     else:  # generate 400m workout
         for i in range(num_laps):

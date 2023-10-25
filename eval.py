@@ -71,6 +71,114 @@ def evaluate(test_labels, predictions):
     return precision, recall
 
 
+def merge_intervals(intervals):
+    if not intervals:
+        return []
+
+    intervals.sort(key=lambda x: x[0])
+
+    merged_intervals = [intervals[0]]
+
+    for i in range(1, len(intervals)):
+        current_interval = intervals[i]
+        last_merged = merged_intervals[-1]
+
+        if current_interval[0] <= last_merged[1]:
+            merged_intervals[-1] = (last_merged[0], max(last_merged[1], current_interval[1]))
+        else:
+            merged_intervals.append(current_interval)
+
+    return merged_intervals
+
+def intersection_of_intervals(intervals1, intervals2):
+    merged_intervals1 = merge_intervals(intervals1)
+    merged_intervals2 = merge_intervals(intervals2)
+
+    intersection = []
+    
+    i = 0
+    j = 0
+
+    while i < len(merged_intervals1) and j < len(merged_intervals2):
+        interval1 = merged_intervals1[i]
+        interval2 = merged_intervals2[j]
+
+        # Check if there is an intersection between the two intervals
+        if interval1[1] < interval2[0]:
+            i += 1
+        elif interval2[1] < interval1[0]:
+            j += 1
+        else:
+            # Calculate the intersection and move forward in both intervals
+            intersection_start = max(interval1[0], interval2[0])
+            intersection_end = min(interval1[1], interval2[1])
+            intersection.append((intersection_start, intersection_end))
+
+            if interval1[1] < interval2[1]:
+                i += 1
+            else:
+                j += 1
+
+    return intersection
+
+
+def union_of_intervals(intervals1, intervals2):
+    merged_intervals1 = merge_intervals(intervals1)
+    merged_intervals2 = merge_intervals(intervals2)
+
+    union = []
+    
+    i = 0
+    j = 0
+
+    while i < len(merged_intervals1) and j < len(merged_intervals2):
+        interval1 = merged_intervals1[i]
+        interval2 = merged_intervals2[j]
+
+        # If interval1 ends before interval2 starts, add interval1 to the union
+        if interval1[1] < interval2[0]:
+            union.append(interval1)
+            i += 1
+        # If interval2 ends before interval1 starts, add interval2 to the union
+        elif interval2[1] < interval1[0]:
+            union.append(interval2)
+            j += 1
+        else:
+            # Calculate the union of overlapping intervals and move forward in both intervals
+            union_start = min(interval1[0], interval2[0])
+            union_end = max(interval1[1], interval2[1])
+            union.append((union_start, union_end))
+            
+            # Move forward in the interval that ends later
+            if interval1[1] < interval2[1]:
+                i += 1
+            else:
+                j += 1
+
+    # Add any remaining intervals from both lists to the union
+    union.extend(merged_intervals1[i:])
+    union.extend(merged_intervals2[j:])
+
+    return union
+
+def iou(test_labels, predictions):
+    sec_overlap = 4
+
+    intervals1 = [(test-sec_overlap/2, test+sec_overlap/2) for test in test_labels]
+    intervals2 = [(pred-sec_overlap/2, pred+sec_overlap/2) for pred in predictions]
+
+    intersection = intersection_of_intervals(intervals1, intervals2)
+    union = merge_intervals(union_of_intervals(intervals1, intervals2))
+
+    print("Intersection:", intersection)
+    print("Union:", union)
+
+    intersection_area = sum([inter[1] - inter[0] for inter in intersection])
+    union_area = sum([un[1] - un[0] for un in union])
+
+    return intersection_area / union_area if union_area > 0 else 0
+
+
 if __name__ == "__main__":
     ##### OLD TESTS
     # # test cases:
@@ -95,3 +203,7 @@ if __name__ == "__main__":
     print(evaluate([1, 2, 3], [0.9, 1.6, 2.9]))
 
     print(evaluate([1, 2, 3], []))
+
+    print(iou([1, 2, 3], []))
+
+    print(iou([1, 2, 5], [1, 2]))

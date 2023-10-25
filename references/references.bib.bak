@@ -494,24 +494,6 @@ https://www.sciencedirect.com/science/article/pii/S0968090X21002771},
   url           = {https://support.garmin.com/en-US/?faq=z0n0KE1XVF0Pe4Su8QiZgA},
 }
 
-'
-
-@TechReport{Dumas2022a,
-  author        = {Dumas, Joe},
-  title         = {Accuracy of {Garmin} {GPS} {Running} {Watches} over {Repetitive} {Trials} on the {Same} {Route}},
-  year          = {2022},
-  month         = mar,
-  note          = {arXiv:2203.00491 [cs] type: article},
-  __markedentry = {[gareth:6]},
-  abstract      = {Many runners use watches incorporating Global Positioning System technology to track their workouts. These devices can be valuable training aids, but they have limitations. For several reasons including variations in satellite position, environmental factors, and design decisions made by the manufacturer, GPS-enabled watches can produce position measurement errors. These can result in incorrect estimations of total distance covered as well as running pace. This study examined the accuracy of three Garmin running watches of different technological generations using repetitive trials, over several years, by the same runner over the same route. The older watches, a Forerunner 205 and a Forerunner 220, showed similar accuracy when traversing the route. The newer generation watch, a Forerunner 45S, was found to be significantly less accurate in terms of both the trueness and precision of its distance measurements. This may indicate that Garmin, in competition with other manufacturers of similar devices, has chosen in recent years to prioritize device miniaturization and battery life over accuracy.},
-  doi           = {10.48550/arXiv.2203.00491},
-  file          = {:Dumas2022 - Accuracy of Garmin GPS Running Watches Over Repetitive Trials on the Same Route.pdf:PDF},
-  keywords      = {Computer Science - Other Computer Science},
-  school        = {arXiv},
-  url           = {http://arxiv.org/abs/2203.00491},
-  urldate       = {2023-04-19},
-}
-
 @Misc{DepartmentofLocalGovernment2023,
   author        = {Department of Local Government, Sport and Cultural Industries},
   title         = {Athletics track events},
@@ -782,6 +764,55 @@ https://www.sciencedirect.com/science/article/pii/S0968090X21002771},
   language      = {en},
   url           = {https://www.sciencedirect.com/science/article/pii/S0031320319301025},
   urldate       = {2023-05-02},
+}
+
+@Misc{Saxton2023,
+  author       = {Athletics Nelson},
+  title        = {Run, Jump, Throw | Athletics at Saxton Field},
+  howpublished = {Website},
+  year         = {2023},
+  url          = {https://www.saxtonfield.co.nz/sport/athletics/},
+}
+
+@Misc{WorldAthletics2023,
+  author       = {World Athletics},
+  title        = {IAAF Track and Field Facilities Manual},
+  howpublished = {Website},
+  year         = {2008},
+  url          = {https://worldathletics.org/about-iaaf/documents/technical-information},
+}
+
+@TechReport{Priya2022,
+  author      = {Bala Priya},
+  title       = {Regularization in Neural Networks},
+  institution = {Pinecone},
+  year        = {2022},
+  type        = {techreport},
+  url         = {https://www.pinecone.io/learn/regularization-in-neural-networks/#L1-and-L2-Regularization},
+}
+
+@Article{s21248309,
+  author         = {Lee, Inwoong and Kim, Doyoung and Wee, Dongyoon and Lee, Sanghoon},
+  title          = {An Efficient Human Instance-Guided Framework for Video Action Recognition},
+  journal        = {Sensors},
+  year           = {2021},
+  volume         = {21},
+  number         = {24},
+  issn           = {1424-8220},
+  abstract       = {In recent years, human action recognition has been studied by many computer vision researchers. Recent studies have attempted to use two-stream networks using appearance and motion features, but most of these approaches focused on clip-level video action recognition. In contrast to traditional methods which generally used entire images, we propose a new human instance-level video action recognition framework. In this framework, we represent the instance-level features using human boxes and keypoints, and our action region features are used as the inputs of the temporal action head network, which makes our framework more discriminative. We also propose novel temporal action head networks consisting of various modules, which reflect various temporal dynamics well. In the experiment, the proposed models achieve comparable performance with the state-of-the-art approaches on two challenging datasets. Furthermore, we evaluate the proposed features and networks to verify the effectiveness of them. Finally, we analyze the confusion matrix and visualize the recognized actions at human instance level when there are several people.},
+  article-number = {8309},
+  doi            = {10.3390/s21248309},
+  pubmedid       = {34960404},
+  url            = {https://www.mdpi.com/1424-8220/21/24/8309},
+}
+
+@Misc{Virgolin2021,
+  author      = {Marco Virgolin},
+  title       = {Time complexity for different machine learning algorithms},
+  month       = feb,
+  year        = {2021},
+  institution = {GitHub},
+  url         = {https://marcovirgolin.github.io/extras/details_time_complexity_machine_learning_algorithms/},
 }
 
 @Comment{jabref-meta: databaseType:bibtex;}

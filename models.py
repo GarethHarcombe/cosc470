@@ -3,6 +3,9 @@ import datetime as dt
 from sklearn import svm
 import random
 from eval import evaluate
+from eval import iou as evaluate
+from dataloader import read_activity
+from eval_track import get_known_tracks
 
 
 TIME_THRESHOLD = 12
@@ -44,27 +47,33 @@ class Model:
 
 class Acceleration(Model):
     
-    def __init__(self, params=None, requires_training=False, epochs=None):
+    def __init__(self, params=None, requires_training=False, epochs=None, FULL_PIPELINE=True):
         self.params = params
         self.requires_training = requires_training
         self.epochs = epochs
         self.ACCELERATION_THRES = 0.6
+        self.FULL_PIPELINE = FULL_PIPELINE
+        track_csv_path = "data/known_track_locations.csv"
+        self.tracks = get_known_tracks(track_csv_path)
         
     def test(self, activities):
         """Simple predictor that makes predictions off the acceleration of the athlete"""
+
         errors = []
 
-        for file in activities.New_Filename.values:
-            print(file)
-            # points, laps, events = read_activity("data/" + file)
+        for i, row in activities.iterrows():
+            # if self.FULL_PIPELINE:
+            #     points, laps, events = read_activity("data/" + row.New_Filename)
+            # else:
+            #     points, laps, events = read_activity("data/" + row.New_Filename, self.tracks[row.TRACK])
             # points.to_pickle("data/" + file[:-3] + "points" + file[-4:])
             # laps.to_pickle("data/"   + file[:-3] + "laps"   + file[-4:])
             # events.to_pickle("data/" + file[:-3] + "events" + file[-4:])
-            points = pd.read_pickle("data/" + file[:-3] + "points" + file[-4:])
-            laps = pd.read_pickle("data/"   + file[:-3] + "laps"   + file[-4:])
-            events = pd.read_pickle("data/" + file[:-3] + "events" + file[-4:])
+            points = pd.read_pickle("data/" + row.New_Filename[:-3] + "points" + row.New_Filename[-4:])
+            laps = pd.read_pickle("data/"   + row.New_Filename[:-3] + "laps"   + row.New_Filename[-4:])
+            events = pd.read_pickle("data/" + row.New_Filename[:-3] + "events" + row.New_Filename[-4:])
 
-            # points = points[points.dist_to_track < 100]
+            points = points[points.dist_to_track < 100]
 
             predictions = grouping_1d(points[points.acceleration > self.ACCELERATION_THRES].time_after_start.reset_index(drop=True) - 6, grouping_method="first")
 
@@ -82,10 +91,15 @@ class Acceleration(Model):
 
 class SlidingWindow(Model):
 
-    def __init__(self, params=None, requires_training=True, epochs=10):
+    def __init__(self, params=None, requires_training=True, epochs=10, DIVISOR=100, FULL_PIPELINE=True):
         super().__init__(params, requires_training, epochs)
-        self.CLASS_WEIGHT = 250
-        self.clf = svm.SVC(kernel='rbf', class_weight={0: 1.0, 1: self.CLASS_WEIGHT / 6}) # positive class is weighted higher
+        self.CLASS_WEIGHT = 230   # 250
+        self.clf = svm.SVC(kernel='rbf', class_weight={0: 1.0, 1: self.CLASS_WEIGHT / DIVISOR}) # positive class is weighted higher
+        self.FULL_PIPELINE = FULL_PIPELINE
+        if not self.FULL_PIPELINE:
+            self.CLASS_WEIGHT = min([230, self.CLASS_WEIGHT])
+        track_csv_path = "data/known_track_locations.csv"
+        self.tracks = get_known_tracks(track_csv_path)
         
     def generate_slices(self, points, laps, events):
         """df with 6 rows, third row is at t
@@ -125,15 +139,19 @@ class SlidingWindow(Model):
         window_times = []
         all_laps = []
 
-        for file in activities.New_Filename.values:
-            print(file)
+        for i, row in activities.iterrows():
+            if self.FULL_PIPELINE:
+                points, laps, events = read_activity("data/" + row.New_Filename)
+            else:
+                points, laps, events = read_activity("data/" + row.New_Filename, self.tracks[row.TRACK])
+            # print(file)
             # points, laps, events = read_activity("data/" + file)
             # points.to_pickle("data/" + file[:-3] + "points" + file[-4:])
             # laps.to_pickle("data/"   + file[:-3] + "laps"   + file[-4:])
             # events.to_pickle("data/" + file[:-3] + "events" + file[-4:])
-            points = pd.read_pickle("data/" + file[:-3] + "points" + file[-4:])
-            laps = pd.read_pickle("data/"   + file[:-3] + "laps"   + file[-4:])
-            events = pd.read_pickle("data/" + file[:-3] + "events" + file[-4:])
+            # points = pd.read_pickle("data/" + file[:-3] + "points" + file[-4:])
+            # laps = pd.read_pickle("data/"   + file[:-3] + "laps"   + file[-4:])
+            # events = pd.read_pickle("data/" + file[:-3] + "events" + file[-4:])
 
             points = points[points.dist_to_track < 100]
 
@@ -206,6 +224,7 @@ class SlidingWindow(Model):
 
         for i, workout_output in enumerate(output):
             workout_output = grouping_1d(pd.Series(workout_output))  # thin the predictions
+            # if i % 10 == 0:
             print("Predicted: ", workout_output)
             print("Actual: ", laps[i].time_after_start.values)
             errors.append(evaluate(laps[i].time_after_start.values, workout_output))

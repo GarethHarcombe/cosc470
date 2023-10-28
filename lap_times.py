@@ -30,7 +30,7 @@ def load_data(FULL_PIPELINE):
 
 def main(DIVISOR=4):
     FULL_PIPELINE = True
-    DIVISOR = 4
+    DIVISOR = 7
     activities = load_data(FULL_PIPELINE)
 
     track_csv_path = "data/known_track_locations.csv"
@@ -58,16 +58,18 @@ def main(DIVISOR=4):
 
     if model.requires_training:
         model.train(train_activities)
-        model.save("sliding_window_model.pkl")
+        # model.save("sliding_window_model.pkl")
+        # model.load("sliding_window_model.pkl")
 
-    errors = model.test(test_activities)
+    errors = model.test(test_activities, metric="both")
 
     print(errors)
-    # print("Average 'precision': ", sum(errors[0]) / len(errors[0]))
-    # print("Average 'recall':    ", sum(errors[1]) / len(errors[1]))
-    print("Error:", sum(errors) / len(errors))
+    print("Average 'precision': ", sum([error[0] for error in errors]) / len(errors))
+    print("Average 'recall':    ", sum([error[1] for error in errors]) / len(errors))
+    print("Average 'IoU':       ", sum([error[2] for error in errors]) / len(errors))
+    # print("Error:", sum(errors) / len(errors))
     print("done")
 
 
 if __name__ == "__main__":
-    main(DIVISOR=3)
+    main(DIVISOR=4)

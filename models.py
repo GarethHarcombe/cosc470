@@ -3,7 +3,7 @@ import datetime as dt
 from sklearn import svm
 import random
 from eval import evaluate
-from eval import iou as evaluate
+from eval import iou
 from dataloader import read_activity
 from eval_track import get_known_tracks
 import pickle
@@ -65,7 +65,7 @@ class Acceleration(Model):
         return predictions
 
     
-    def test(self, activities):
+    def test(self, activities, metric="evaluation"):
         """Simple predictor that makes predictions off the acceleration of the athlete"""
 
         errors = []
@@ -86,7 +86,13 @@ class Acceleration(Model):
             
             print("Predicted: ", predictions)
             print("Actual: ", laps.time_after_start.values)
-            errors.append(evaluate(laps.time_after_start.values, predictions))
+            if metric == "evaluate":
+                errors.append(evaluate(laps.time_after_start.values, predictions))
+            elif metric == "iou":
+                errors.append(iou(laps.time_after_start.values, predictions))
+            else:
+                errors.append(tuple(evaluate(laps.time_after_start.values, predictions)) + 
+                              (iou(laps.time_after_start.values, predictions),))
 
         return errors
     
@@ -244,7 +250,7 @@ class SlidingWindow(Model):
         
         self.clf.fit(condensed_data, condensed_labels)
 
-    def test(self, activities):
+    def test(self, activities, metric="evaluate"):
         test_data, test_labels, test_window_times, laps = self.generate_data(activities)
 
         output = self.generate_predictions(test_data, test_window_times)
@@ -256,6 +262,12 @@ class SlidingWindow(Model):
             # if i % 10 == 0:
             print("Predicted: ", workout_output)
             print("Actual: ", laps[i].time_after_start.values)
-            errors.append(evaluate(laps[i].time_after_start.values, workout_output))
+            if metric == "evaluate":
+                errors.append(evaluate(laps[i].time_after_start.values, workout_output))
+            elif metric == "iou":
+                errors.append(iou(laps[i].time_after_start.values, workout_output))
+            else:
+                errors.append(tuple(evaluate(laps[i].time_after_start.values, workout_output)) + 
+                              (iou(laps[i].time_after_start.values, workout_output),))
 
         return errors

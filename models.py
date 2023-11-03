@@ -21,7 +21,7 @@ def grouping_1d(preds, grouping_method="mean"):
                       (preds <= preds[i] + TIME_THRESHOLD)]
         
         if grouping_method == "mean":
-            final_preds.append(group.mean())
+            final_preds.append(round(group.mean(), 3))
         else:
             # pick the first one as we want 
             # the start of the lap/change in speed

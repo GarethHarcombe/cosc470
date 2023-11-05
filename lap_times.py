@@ -2,7 +2,7 @@ from dataloader import read_activity
 import pandas as pd
 
 from sklearn.model_selection import train_test_split
-from models import SlidingWindow, Acceleration
+from models import SlidingWindow, Acceleration, Encoder
 from eval_track import get_known_tracks
 
 
@@ -54,12 +54,22 @@ def main(DIVISOR=4):
     # test_activities = test_activities[:1]
 
     # model = SlidingWindow(DIVISOR=DIVISOR, FULL_PIPELINE=FULL_PIPELINE)
-    model = Acceleration(FULL_PIPELINE=FULL_PIPELINE)
+    # model = Acceleration(FULL_PIPELINE=FULL_PIPELINE)
+    model = Encoder(FULL_PIPELINE=FULL_PIPELINE)
 
     if model.requires_training:
-        model.train(train_activities)
-        # model.save("sliding_window_model.pkl")
-        # model.load("sliding_window_model.pkl")
+        print("Training...")
+        for i in range(model.epochs):
+            print("Epoch ", i)
+            model.train(train_activities)
+            # model.save("sliding_window_model.pkl")
+            # model.load("sliding_window_model.pkl")
+
+            errors = model.test(test_activities, metric="both")
+            print("Average 'precision': ", sum([error[0] for error in errors]) / len(errors))
+            print("Average 'recall':    ", sum([error[1] for error in errors]) / len(errors))
+            print("Average 'IoU':       ", sum([error[2] for error in errors]) / len(errors))
+            # input()
 
     errors = model.test(test_activities, metric="both")
 

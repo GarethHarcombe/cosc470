@@ -7,7 +7,11 @@ from eval import iou
 from dataloader import read_activity
 from eval_track import get_known_tracks
 import pickle
-
+# import tensorflow as tf
+# from tensorflow.keras.layers import Input, LSTM, Embedding, Dense
+# from tensorflow.keras.models import Model
+# import numpy as np
+# tf.experimental.numpy.experimental_enable_numpy_behavior()
 
 TIME_THRESHOLD = 12
 
@@ -104,7 +108,7 @@ class Acceleration(Model):
 
 class SlidingWindow(Model):
 
-    def __init__(self, params=None, requires_training=True, epochs=10, DIVISOR=4, FULL_PIPELINE=True):
+    def __init__(self, params=None, requires_training=True, epochs=1, DIVISOR=4, FULL_PIPELINE=True):
         super().__init__(params, requires_training, epochs)
         self.CLASS_WEIGHT = 230   # 250
         self.clf = svm.SVC(kernel='rbf', class_weight={0: 1.0, 1: self.CLASS_WEIGHT / DIVISOR}) # positive class is weighted higher
@@ -271,3 +275,173 @@ class SlidingWindow(Model):
                               (iou(laps[i].time_after_start.values, workout_output),))
 
         return errors
+
+
+# class EncoderDecoder(tf.keras.Model):
+
+#   def __init__(self):
+#     super().__init__()
+#     self.optimizer = tf.keras.optimizers.Adam(learning_rate=0.001)
+
+#     self.max_input_seq_length = 2000
+#     self.max_output_seq_length = 50
+
+#     # Define the vocabulary sizes for input and output sequences
+#     self.input_size = 6  # ["track_x", "track_y", "dist_to_track", "speed", "acceleration", "time_after_start"]
+#     self.output_size = 1  # ["time"]
+
+#     # Define the dimensionality of the hidden state of the LSTM
+#     self.hidden_units = 64   # TODO: may need to be 6??
+
+#     # Define the encoder model
+#     # encoder_inputs = Input(shape=(self.max_input_seq_length, self.input_size))
+#     # encoder_embedding = Embedding(input_vocab_size, hidden_units)(encoder_inputs)
+#     self.encoder = LSTM(self.hidden_units, return_state=True)
+
+#     # Define the decoder model
+#     # decoder_inputs = Input(shape=(self.max_output_seq_length, self.output_size))
+#     # decoder_embedding = Embedding(output_vocab_size, hidden_units)(decoder_inputs)
+
+#     # We set up our decoder to return full output sequences and to return internal states as well.
+#     self.decoder_lstm = LSTM(self.hidden_units, return_sequences=True, return_state=True)
+
+#     self.decoder_dense = Dense(self.output_size, activation='softmax')
+
+#   def call(self, encoder_inputs, decoder_inputs, training=False):
+#     # encoder_inputs, decoder_inputs = inputs
+
+#     encoder_outputs, state_h, state_c = self.encoder(encoder_inputs)
+    
+#     # We discard `encoder_outputs` and only keep the states
+#     encoder_states = [state_h, state_c]
+
+#     decoder_outputs, _, _ = self.decoder_lstm(decoder_inputs, initial_state=encoder_states)
+
+#     decoder_outputs = self.decoder_dense(decoder_outputs)
+
+#     return decoder_outputs
+
+
+# class Encoder(Model):
+    
+#     def __init__(self, params=None, requires_training=True, epochs=10, FULL_PIPELINE=True):
+#         super().__init__(params, requires_training, epochs)
+#         self.FULL_PIPELINE = FULL_PIPELINE
+
+#         self.model = EncoderDecoder()
+
+#         # Compile the model
+#         # self.model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+
+
+#     def save(self, filename):
+#         self.model.save("encoder_decoder.h5")   # 'model_name.h5'
+
+#     def load(self, filename):
+#         self.model = tf.keras.models.load_model("encoder_decoder.h5")
+
+#     def predict(self, points, events, laps=None):
+#         data, _, window_times = self.generate_slices(points, events, laps)
+
+#         test_labels_preds = self.clf.predict(data)
+#         workout_output = []
+
+#         for i, label in enumerate(test_labels_preds):
+#             if label == 1:
+#                 workout_output.append(window_times[i])
+
+#         return grouping_1d(pd.Series(workout_output))
+
+#     def pad2d(self, tensor, length, addition=1.0):
+#         return np.append(tensor, np.zeros((length - tensor.shape[0], tensor.shape[-1])) + addition).reshape(-1, tensor.shape[-1])
+
+#     def pad1d(self, tensor, length, addition=1.0):
+#         return np.append(tensor, np.zeros((length - tensor.shape[0],)) + addition)
+
+
+#     def generate_data(self, activities):
+#         # Example training data preparation (not the actual implementation):
+#         encoder_input_data = []
+#         decoder_input_data = []
+#         decoder_target_data = []
+#         seq_lengths = []
+#         pred_lengths = []
+
+#         for i, row in activities.iterrows():
+#             # if self.FULL_PIPELINE:
+#             #     points, laps, events = read_activity("data/" + row.New_Filename)
+#             # else:
+#             #     points, laps, events = read_activity("data/" + row.New_Filename, self.tracks[row.TRACK])
+
+#             points = pd.read_pickle("data/" + row.New_Filename[:-3] + "points" + row.New_Filename[-4:])
+#             laps = pd.read_pickle("data/"   + row.New_Filename[:-3] + "laps"   + row.New_Filename[-4:])
+#             events = pd.read_pickle("data/" + row.New_Filename[:-3] + "events" + row.New_Filename[-4:])
+
+#             points = points[["track_x", "track_y", "dist_to_track", "speed", "acceleration", "time_after_start"]]
+#             laps = laps[:-1].time_after_start / points.iloc[-1].time_after_start
+
+#             seq_lengths.append(len(points)-1)
+#             pred_lengths.append(len(laps.values))
+
+#             encoder_inputs = tf.convert_to_tensor(self.pad2d(points.values, 
+#                                                            self.model.max_input_seq_length, 0.0), dtype=tf.float32)
+#             decoder_inputs = tf.convert_to_tensor(self.pad1d(np.insert(laps.values, 0, 0.0),
+#                                                            self.model.max_output_seq_length).reshape(-1, 1), dtype=tf.float32)
+#             decoder_target = tf.convert_to_tensor(self.pad1d(np.append(laps.values, 1.0), 
+#                                                            self.model.max_output_seq_length), dtype=tf.float32)
+
+#             # print(encoder_inputs)
+#             # print(decoder_inputs)
+#             # print(decoder_target)
+
+#             encoder_input_data.append(encoder_inputs)
+#             decoder_input_data.append(decoder_inputs)
+#             decoder_target_data.append(decoder_target)
+
+#         return encoder_input_data, decoder_input_data, decoder_target_data, seq_lengths, pred_lengths
+
+#     def train(self, activities):
+#         # Now, you can train this model using your dataset. You'll need to preprocess your input and output sequences as required and one-hot encode your output sequences.
+#         encoder_input_data, decoder_input_data, decoder_target_data, seq_lengths, pred_lengths = self.generate_data(activities)
+        
+#         for i in range(len(encoder_input_data)):
+#             input1 = tf.expand_dims(encoder_input_data[i], axis=0)
+#             input2 = tf.expand_dims(decoder_input_data[i], axis=0)
+#             output = tf.expand_dims(decoder_target_data[i], axis=0)
+#             with tf.GradientTape() as tape:
+#                 predictions = self.model(input1, input2).reshape(((-1, self.model.max_output_seq_length)))
+#                 loss = tf.keras.metrics.categorical_crossentropy(output, predictions)
+
+#             gradients = tape.gradient(loss, self.model.trainable_variables)
+#             self.model.optimizer.apply_gradients(zip(gradients, self.model.trainable_variables))  
+
+
+#     def test(self, activities, metric="evaluate"):
+#         # Once the model is trained, you can use it for inference by defining separate encoder and decoder models for the encoding and decoding processes.
+#         encoder_input_data, decoder_input_data, decoder_target_data, seq_lengths, pred_lengths = self.generate_data(activities)
+
+#         errors = []
+
+#         for i in range(len(encoder_input_data)):
+#             input1 = tf.expand_dims(encoder_input_data[i], axis=0)
+#             input2 = tf.expand_dims(decoder_input_data[i], axis=0)
+#             # output = tf.expand_dims(decoder_target_data[i], axis=0)
+
+#             outputs = self.model(input1, input2)
+#             # print("Outputs: ", outputs)
+#             outputs = outputs[outputs < 0.99]
+#             # print("Outputs: ", outputs)
+#             preds = (outputs * encoder_input_data[i][seq_lengths[i]][5]).numpy().reshape((-1))
+#             actual = (decoder_target_data[i] * encoder_input_data[i][seq_lengths[i]][5]).numpy().reshape((-1))[:pred_lengths[i]]
+#             # print("Predicted: ", preds)
+#             # print("Actual: ", actual)
+
+#             if metric == "evaluate":
+#                 errors.append(evaluate(actual, preds))
+#             elif metric == "iou":
+#                 errors.append(iou(actual, preds))
+#             else:
+#                 errors.append(tuple(evaluate(actual, preds)) + 
+#                               (iou(actual, preds),))
+
+#         return errors
